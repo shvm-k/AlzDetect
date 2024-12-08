@@ -101,14 +101,11 @@ We welcome contributions to improve the project and resolve issues. Here’s how
 - **Explainability**: Use Grad-CAM to provide insights into the regions of the brain contributing to classification.  
 - **Larger Dataset**: Extend training to a more diverse dataset for improved generalizability.
 
----
-
-### 📜 **License**  
-This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
-
----
 
 ### 🛠️ **Open Source Collaboration**  
 This project is open source and relies on contributions from the community to address issues, add features, and improve overall quality. Please report bugs, suggest features, or resolve existing issues in the **[Issues](./issues)** tab.
 
-Let’s work together to make a meaningful impact in Alzheimer's detection!
+![GitHub Issues](https://img.shields.io/github/issues/<shvm-k>/<AlzDetect>)
+![GitHub Forks](https://img.shields.io/github/forks/<shvm-k>/<AlzDetect>)
+![GitHub Stars](https://img.shields.io/github/stars/<shvm-k>/<AlzDetect>)
+
