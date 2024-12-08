@@ -1,4 +1,7 @@
 # AlzDetect
+![GitHub Issues](https://img.shields.io/github/issues/shvm-k/AlzDetect)
+![GitHub Forks](https://img.shields.io/github/forks/shvm-k/AlzDetect)
+![GitHub Stars](https://img.shields.io/github/stars/shvm-k/AlzDetect)
 
 Alzheimer's disease is a progressive neurological disorder that impacts memory, thinking, and behavior. Early and accurate diagnosis is critical for effective treatment and management. This project utilizes a pre-trained deep learning model to classify MRI scans into four categories:  
 - **Non-Demented**  
@@ -105,7 +108,5 @@ We welcome contributions to improve the project and resolve issues. Here’s how
 ### 🛠️ **Open Source Collaboration**  
 This project is open source and relies on contributions from the community to address issues, add features, and improve overall quality. Please report bugs, suggest features, or resolve existing issues in the **[Issues](./issues)** tab.
 
-![GitHub Issues](https://img.shields.io/github/issues/<shvm-k>/<AlzDetect>)
-![GitHub Forks](https://img.shields.io/github/forks/<shvm-k>/<AlzDetect>)
-![GitHub Stars](https://img.shields.io/github/stars/<shvm-k>/<AlzDetect>)
+
 
