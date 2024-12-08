@@ -106,7 +106,7 @@ We welcome contributions to improve the project and resolve issues. Here’s how
 
 
 ### 🛠️ **Open Source Collaboration**  
-This project is open source and relies on contributions from the community to address issues, add features, and improve overall quality. Please report bugs, suggest features, or resolve existing issues in the **[Issues](./issues)** tab.
+This project is open source and relies on contributions from the community to address issues, add features, and improve overall quality. Please report bugs, suggest features, or resolve existing issues in the **[Issues](https://github.com/shvm-k/AlzDetect/issues)** tab.
 
 
 
