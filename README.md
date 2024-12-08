@@ -12,6 +12,10 @@ Alzheimer's disease is a progressive neurological disorder that impacts memory, 
 The goal is to assist in early diagnosis using MRI data, thus contributing to the healthcare domain.
 
 ---
+### 👥 Team
+- [@Stiena](https://github.com/Stiena02)
+- [@prabhat108](https://github.com/prabhat108)
+---
 
 ### 📂 **Dataset Overview**
 
