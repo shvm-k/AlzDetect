@@ -1,116 +1,54 @@
-# AlzDetect
-![GitHub Issues](https://img.shields.io/github/issues/shvm-k/AlzDetect)
-![GitHub Forks](https://img.shields.io/github/forks/shvm-k/AlzDetect)
-![GitHub Stars](https://img.shields.io/github/stars/shvm-k/AlzDetect)
+# 🧠 Alzheimer's Disease Detection using MobileNetV2 + Fuzzy Logic
 
-Alzheimer's disease is a progressive neurological disorder that impacts memory, thinking, and behavior. Early and accurate diagnosis is critical for effective treatment and management. This project utilizes a pre-trained deep learning model to classify MRI scans into four categories:  
-- **Non-Demented**  
-- **Mild Demented**  
-- **Moderate Demented**  
-- **Very Mild Demented**  
+This project presents a deep learning-based approach to classify the stages of Alzheimer's Disease from MRI brain scans using **MobileNetV2**, enhanced with **Fuzzy Logic** for improved interpretability and precision.
 
-The goal is to assist in early diagnosis using MRI data, thus contributing to the healthcare domain.
 
----
-### 👥 Team
-- [@Stiena](https://github.com/Stiena02)
-- [@prabhat108](https://github.com/prabhat108)
----
+## Overview
 
-### 📂 **Dataset Overview**
+Alzheimer’s Disease (AD) is a progressive neurological disorder. Early and accurate diagnosis is critical for patient care. This model classifies MRI images into four classes:
+- **Mild Dementia**
+- **Moderate Dementia**
+- **Non-Demented**
+- **Very Mild Dementia**
 
-The dataset contains MRI brain scans labeled into the above four categories. Key details about the dataset:  
-- **Source**: Publicly available dataset [Kaggle](https://www.kaggle.com/datasets/ninadaithal/imagesoasis).  
-- **Preprocessing**: Images are resized to a uniform dimension, normalized, and their labels are one-hot encoded.  
-- **Split**: Divided into training, validation, and test sets.
+Two models were developed:
+- ✅ **MobileNetV2-based CNN**
+- ✅ **MobileNetV2 + Fuzzy Logic post-processing**
 
----
+Fuzzy logic is applied after the CNN to enhance decision boundaries based on feature outputs.
 
-### 🛠️ **Implementation**
+## 📂 Dataset
 
-#### **Preprocessing**  
-- Images are resized to 300x300 pixels.  
-- Pixel values are normalized to improve model convergence.  
-- Labels are one-hot encoded for multi-class classification.
+The dataset used is the **Alzheimer MRI Dataset** from [Kaggle](https://www.kaggle.com/datasets/sachinkumar413/alzheimer-mri-dataset).
 
-#### **Data Augmentation**  
-To enhance the model's ability to generalize, the following augmentations are applied:  
-- Random rotation  
-- Zoom  
-- Horizontal and vertical flipping  
-- Brightness variations
 
-Below is an example of augmented training data:  
-<p>
-  <img src="https://github.com/user-attachments/assets/477ef488-852c-4636-9cb1-b9d038164dba" alt="Augmented Training Data Samples" width="500" />
+
+## 🚀 Model Architecture
+
+### MobileNetV2 CNN
+- Lightweight CNN optimized for mobile & edge devices
+- Transfer learning with fine-tuning
+
+### Fuzzy Logic System
+- Extracted features from the CNN are fed into a fuzzy inference system
+- Improves classification robustness, especially on borderline cases
+
+
+## 📊 Results
+
+| Model                       | Accuracy | Precision | Recall | F1-Score |
+|----------------------------|----------|-----------|--------|----------|
+| MobileNetV2 (baseline)     | 94.2%    | 0.93      | 0.94   | 0.935    |
+| MobileNetV2 + Fuzzy Logic  | **96.1%**| **0.95**  | **0.96** | **0.955** |
+
+<p align="left">
+<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>
 </p>
 
----
+<p align="left">
+<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/1f136f58-f8c6-45ba-acaa-02745cf848d2" />
+</p>
 
-### 🧠 **Model Architecture**  
-The project uses **EfficientNetB0** as the base model, fine-tuned for Alzheimer's classification. Key layers added include:  
-- **Global Average Pooling** for feature extraction.  
-- **Dense Layers** with ReLU activation for classification.  
-- **Softmax Output Layer** for predicting probabilities across four classes.
-
----
-
-### 🏋️ **Training**  
-The model is trained using the **categorical crossentropy loss** function with the Adam optimizer. Early stopping and learning rate reduction techniques are employed to avoid overfitting and improve convergence.
-
----
-
-### 🐞 **Known Issues**  
-- [ ] Error in `model.fit`: Target and output shape mismatch.  
-- [ ] Fuzzy logic not yet implemented in the evaluation phase.
- <img width="300" alt="Screenshot 2024-12-08 at 12 18 00 PM" src="https://github.com/user-attachments/assets/65107c9c-5c54-4760-b928-689b1dbde8fc">
-
----
-
-## 🤝 **Contributing**  
-We welcome contributions to improve the project and resolve issues. Here’s how you can help:
-
-1. **Fork the repository**  
-   - Go to the repository page.  
-   - Click the **"Fork"** button in the top-right corner.
-
-2. **Clone your fork**  
-
-
-3. **Create a branch**  
-
-4. **Make changes and commit**  
-- Fix issues or add features.  
-- Stage your changes:  
-  ```
-  git add .
-  ```
-- Commit your changes:  
-  ```
-  git commit -m "Fix: Error in model.fit"
-  ```
-
-5. **Push changes**  
-- Push your branch:  
-  ```
-  git push origin fix-error-xyz
-  ```
-
-6. **Submit a pull request (PR)**  
-- Open a pull request on the original repository.
-
----
-
-### 🚀 **Future Work**  
-
-- **Fuzzy Logic Integration**: Incorporate fuzzy rules for enhanced classification under uncertainty.  
-- **Deployment**: Package the model into a web application for healthcare practitioners.  
-- **Explainability**: Use Grad-CAM to provide insights into the regions of the brain contributing to classification.  
-- **Larger Dataset**: Extend training to a more diverse dataset for improved generalizability.
-
-
-### 🛠️ **Open Source Collaboration**  
-This project is open source and relies on contributions from the community to address issues, add features, and improve overall quality. Please report bugs, suggest features, or resolve existing issues in the **[Issues](https://github.com/shvm-k/AlzDetect/issues)** tab.
-
-
-
+<p align="left">
+<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/b4c67d4f-9417-43eb-9da5-76379e656b84" />
+</p>
