@@ -38,14 +38,12 @@ jobs:
           git config user.name "GitHub Actions"
           git add README.md
           git commit -m "Sync to Hugging Face Space" || echo "nothing to commit"
-          # Strip any stray whitespace/newlines from the secret.
+          # Strip any stray whitespace/newlines from the secret (a trailing
+          # newline is what caused the earlier "Malformed input to a URL" error).
           TOKEN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
           USER="$(printf '%s' "$HF_USERNAME" | tr -d '[:space:]')"
           SPACE="$(printf '%s' "$HF_SPACE" | tr -d '[:space:]')"
-          # Pass credentials via an auth header instead of embedding them in the
-          # URL (avoids "Malformed input to a URL function" on newer git/curl).
-          AUTH="$(printf '%s:%s' "$USER" "$TOKEN" | base64 -w0)"
-          git -c http.extraheader="Authorization: Basic ${AUTH}" \
-            push --force \
-            "https://huggingface.co/spaces/${USER}/${SPACE}" \
+          export GIT_TERMINAL_PROMPT=0
+          git push --force \
+            "https://${USER}:${TOKEN}@huggingface.co/spaces/${USER}/${SPACE}" \
             HEAD:main
