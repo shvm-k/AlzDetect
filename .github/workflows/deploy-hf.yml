@@ -2,11 +2,11 @@ name: Deploy to Hugging Face Space
 
 # Auto-syncs this repo to a Hugging Face Space on every push to the branch.
 # One-time setup (see deploy/DEPLOY.md):
-#   1. Create an empty Docker Space at huggingface.co/new-space
+#   1. Create an empty Docker Space named "AlzDetect" at huggingface.co/new-space
 #   2. In this GitHub repo: Settings -> Secrets and variables -> Actions, add:
-#        HF_TOKEN     = a Hugging Face token with "write" scope
-#        HF_USERNAME  = your Hugging Face username
-#        HF_SPACE     = the Space name (e.g. AlzDetect)
+#        HF_TOKEN     = a Hugging Face token with "write" scope   (REQUIRED)
+#   Username/Space default to SHVMK/AlzDetect below; override with the
+#   HF_USERNAME / HF_SPACE secrets if you rename them.
 
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          HF_USERNAME: ${{ secrets.HF_USERNAME }}
-          HF_SPACE: ${{ secrets.HF_SPACE }}
+          HF_USERNAME: ${{ secrets.HF_USERNAME || 'SHVMK' }}
+          HF_SPACE: ${{ secrets.HF_SPACE || 'AlzDetect' }}
         run: |
           set -e
           # The Space's README.md must carry HF frontmatter.
