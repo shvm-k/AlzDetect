@@ -35,8 +35,37 @@ _demo_mode = True
 _last_conv_layer = "Conv_1"  # final conv layer name in MobileNetV2
 
 
+def _download_weights(url):
+    """Download weights from MODEL_URL into MODELS_DIR. Returns path or None."""
+    import urllib.request
+
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    ext = ".h5" if url.split("?")[0].endswith(".h5") else ".keras"
+    dest = os.path.join(MODELS_DIR, "downloaded_model" + ext)
+    if os.path.exists(dest):
+        return dest
+    try:
+        print(f"[AlzDetect] Downloading model from {url} ...")
+        urllib.request.urlretrieve(url, dest)
+        print(f"[AlzDetect] Saved model to {dest}")
+        return dest
+    except Exception as exc:  # pragma: no cover - defensive
+        print(f"[AlzDetect] Model download failed: {exc}")
+        return None
+
+
 def _find_weights():
-    """Return path to a model file in models/, or None."""
+    """Return path to a model file: env override, MODEL_URL download, or models/."""
+    env_path = os.environ.get("MODEL_PATH")
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    url = os.environ.get("MODEL_URL")
+    if url:
+        downloaded = _download_weights(url)
+        if downloaded:
+            return downloaded
+
     if not os.path.isdir(MODELS_DIR):
         return None
     for name in sorted(os.listdir(MODELS_DIR)):
