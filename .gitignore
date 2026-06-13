@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+# Trained weights (large, add manually)
+backend/models/*.keras
+backend/models/*.h5
+.DS_Store
+.venv/

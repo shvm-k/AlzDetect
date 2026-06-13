@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlzDetect — Alzheimer's MRI Stage Classifier</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">🧠</span>
+      <div>
+        <h1>AlzDetect</h1>
+        <p class="tagline">Alzheimer's stage classification from MRI scans</p>
+      </div>
+    </div>
+    <span id="mode-badge" class="badge hidden"></span>
+  </header>
+
+  <main>
+    <section class="card uploader" id="dropzone">
+      <input type="file" id="file-input" accept="image/*" hidden />
+      <div class="upload-inner">
+        <div class="upload-icon">⬆️</div>
+        <p><strong>Drop an MRI scan here</strong> or click to browse</p>
+        <p class="hint">PNG / JPG · max 10 MB</p>
+      </div>
+      <img id="preview" class="hidden" alt="preview" />
+    </section>
+
+    <button id="analyze-btn" class="primary" disabled>Analyze scan</button>
+
+    <section id="results" class="card results hidden">
+      <h2>Result</h2>
+      <div class="prediction-row">
+        <div>
+          <p class="muted">Predicted stage</p>
+          <p id="prediction" class="prediction"></p>
+        </div>
+        <div class="confidence-wrap">
+          <p class="muted">Confidence</p>
+          <p id="confidence" class="confidence"></p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <h3>Class probabilities</h3>
+          <div id="bars"></div>
+        </div>
+        <div id="heatmap-block" class="hidden">
+          <h3>Model attention (Grad-CAM)</h3>
+          <img id="heatmap" alt="attention heatmap" />
+          <p class="hint">Warmer regions influenced the prediction more.</p>
+        </div>
+      </div>
+    </section>
+
+    <p id="error" class="error hidden"></p>
+  </main>
+
+  <footer>
+    <p class="disclaimer">
+      ⚠️ <strong>Research / educational tool only.</strong> AlzDetect is not a
+      medical device and must not be used for clinical diagnosis. Always consult
+      a qualified healthcare professional.
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
