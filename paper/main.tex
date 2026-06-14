@@ -1,0 +1,267 @@
+%% ============================================================
+%%  AlzDetect — Journal manuscript (IEEEtran)
+%%  Target: IEEE Access / SN Computer Science (adjust template per venue)
+%%
+%%  HOW TO USE
+%%   1. Upload this folder to Overleaf (New Project -> Upload).
+%%   2. Set compiler to pdfLaTeX, main document = main.tex.
+%%   3. Search for "TODO" — every one marks a number to verify or a
+%%      figure/experiment to insert before submission.
+%%
+%%  INTEGRITY NOTE: the results below use the most detailed table from the
+%%  capstone (63% -> 86%). Your abstract (56% -> 92%) and GitHub README
+%%  (94.2% -> 96.1%) report DIFFERENT numbers. Pick ONE clean reproducible
+%%  run and make every number in this paper match it.
+%% ============================================================
+\documentclass[journal]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{Fuzzy Logic--Based Adaptive Resampling for Class-Imbalanced
+Alzheimer's Disease Staging from MRI using MobileNetV2}
+
+\author{Aditya Jaiswal, Nilabh Shivam, Parth Vaishnav, Prabhat Tiwari,
+and Stiena Wilson Anthony% TODO: confirm author order; add supervisor as corresponding author
+\thanks{The authors are with the School of Computing Science and Engineering,
+VIT Bhopal University, Madhya Pradesh, India (e-mail: TODO).}}
+
+\markboth{Preprint --- Draft for Submission}{}
+\maketitle
+
+\begin{abstract}
+Early staging of Alzheimer's disease (AD) from magnetic resonance imaging (MRI)
+is hampered by severe class imbalance: non-demented scans vastly outnumber
+moderate-dementia cases, biasing convolutional neural networks (CNNs) toward the
+majority class and collapsing recall on the rarest, most clinically important
+stages. We present a fuzzy logic--based adaptive resampling scheme that sets a
+per-class oversampling factor as a function of each class's imbalance ratio
+using a triangular-membership Mamdani controller, and couples it with a
+transfer-learned MobileNetV2 classifier for four-way AD staging (Non-Demented,
+Very Mild, Mild, Moderate). On the Kaggle Alzheimer MRI dataset, the adaptive
+scheme raised overall accuracy from \textbf{63\% to 86\%}% TODO: verify from single clean run
+and macro-averaged F1 from \textbf{0.49 to 0.85}, with moderate-dementia recall
+improving from \textbf{0\% to 90\%}. We compare the fuzzy controller against
+standard imbalance baselines (class weighting, random oversampling, SMOTE, and
+focal loss)% TODO: run these baselines — required for a journal
+and report 5-fold cross-validated results. We discuss the method's limitations,
+including dataset-level leakage risks and the modest novelty of the controller
+relative to proportional oversampling.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Alzheimer's disease, fuzzy logic, class imbalance, MobileNetV2, transfer
+learning, medical image classification, MRI.
+\end{IEEEkeywords}
+
+\section{Introduction}
+\IEEEPARstart{A}{lzheimer's} disease is the leading cause of dementia and a
+progressive neurodegenerative disorder for which early, accurate staging is
+critical to timely intervention. Deep CNNs applied to structural MRI have shown
+strong performance on AD detection, but their accuracy degrades sharply when the
+training data are class-imbalanced---a near-universal property of clinical
+neuroimaging cohorts, where healthy and very-mild cases dominate. A model trained
+naively on such data tends to maximise overall accuracy by predicting the
+majority class, yielding near-zero recall on moderate dementia despite this being
+the most consequential error to avoid.
+
+In our baseline experiments, an unmodified MobileNetV2 trained on the raw
+imbalanced data achieved only \textbf{63\%}% TODO: verify
+overall accuracy and \textbf{0\%} recall on moderate dementia. This paper asks
+whether a principled, \emph{adaptive} resampling policy---one that allocates more
+synthetic samples to classes in proportion to how imbalanced they are---can
+recover performance on the rare stages without the manual tuning of fixed-ratio
+oversampling. We formulate this policy as a small fuzzy inference system.
+
+\textbf{Contributions.}
+(1) A fuzzy Mamdani controller that maps a class's imbalance ratio to an
+oversampling factor via triangular membership functions and three IF--THEN rules.
+(2) Integration of this controller as a preprocessing stage for a transfer-learned
+MobileNetV2 four-way AD stager.
+(3) An empirical comparison against standard imbalance-handling baselines, with
+per-class metrics and cross-validation.% TODO: complete baselines + CV
+
+\section{Related Work}
+Hybrid fuzzy--deep-learning systems have been explored across medical and
+non-medical imaging. Fuzzy pooling within CNNs has improved lung-ultrasound
+classification with explainable outputs~\cite{ref2}. Surveys of fuzzy deep
+learning for AD highlight fuzzy logic's role in managing annotation uncertainty
+and improving interpretability~\cite{ref3,ref8}. Fuzzy--CNN hybrids have been
+applied to edge-detected AD MRI~\cite{ref1}, melanoma diagnosis via fuzzy
+correlation maps~\cite{ref10}, three-way opinion classification~\cite{ref4},
+handwritten-digit recognition~\cite{ref6}, and general image
+classification~\cite{ref7}. Transfer learning with CNN backbones is a standard
+route to high accuracy on limited data~\cite{ref9}, and broad reviews catalogue
+machine-learning approaches to AD detection~\cite{ref5}. In contrast to prior
+work that embeds fuzzy operations \emph{inside} the network, we keep the CNN
+unchanged and apply fuzzy reasoning at the \emph{data-balancing} stage, which
+isolates the contribution of adaptive resampling and keeps the pipeline simple
+and reproducible.
+
+\section{Methodology}
+\subsection{Overview}
+The pipeline has three stages: (i) standardised MRI preprocessing, (ii) a fuzzy
+adaptive-resampling controller that balances the training set, and (iii) a
+transfer-learned MobileNetV2 classifier. Fig.~\ref{fig:arch} shows the
+architecture.% TODO: insert architecture figure as arch.png
+\begin{figure}[t]
+  \centering
+  % \includegraphics[width=\columnwidth]{arch.png}  % TODO: add figure file
+  \fbox{\parbox[c][3.2cm][c]{0.9\columnwidth}{\centering TODO: architecture figure
+  (Input MRI $\rightarrow$ Preprocess $\rightarrow$ Fuzzy resampling $\rightarrow$
+  MobileNetV2 $\rightarrow$ 4-class softmax)}}
+  \caption{Proposed fuzzy-resampling + MobileNetV2 pipeline.}
+  \label{fig:arch}
+\end{figure}
+
+\subsection{Preprocessing}
+MRI slices are resized to $128\times128$, converted to three channels, and
+intensity-normalised to $[0,1]$. Labels are one-hot encoded over the four stages.
+
+\subsection{Fuzzy Adaptive-Resampling Controller}
+For each class $c$ with sample count $n_c$, we define an imbalance score
+\begin{equation}
+  I_c = 1 - \frac{n_c}{\max_k n_k},
+\end{equation}
+so the largest class has $I_c = 0$. A single-input, single-output Mamdani fuzzy
+system maps $I_c$ to a resampling factor $r_c \in [0,1]$. The antecedent
+\textit{imbalance} and consequent \textit{resample\_factor} each use three
+\emph{static} triangular membership functions (low, medium, high), governed by
+three rules:
+\begin{itemize}
+  \item R1: \textbf{IF} imbalance is low \textbf{THEN} resample is low;
+  \item R2: \textbf{IF} imbalance is medium \textbf{THEN} resample is medium;
+  \item R3: \textbf{IF} imbalance is high \textbf{THEN} resample is high.
+\end{itemize}
+Centroid defuzzification yields a crisp $r_c$, and the target size for class $c$
+is $n_c^{\ast} = n_c + r_c \cdot \max_k n_k$. Minority classes are augmented up to
+$n_c^{\ast}$ using label-preserving transformations (rotation $\pm15^\circ$,
+width/height shift $\pm10\%$, horizontal flip, brightness $\pm20\%$).
+
+\noindent\textit{Remark.} The membership functions and rules are fixed, not
+learned. We deliberately do not claim attention gating or training-time
+adaptation; the contribution is an interpretable, parameter-light alternative to
+fixed-ratio oversampling.% Honesty guard — keeps claims aligned with the code.
+
+\subsection{Classifier}
+We use MobileNetV2 (ImageNet-pretrained) with all but the last 20 layers frozen,
+followed by global average pooling, a 128-unit ReLU dense layer, dropout (0.3),
+and a 4-way softmax. Training uses Adam (lr $=10^{-4}$), categorical
+cross-entropy, batch size 32, with early stopping on validation loss.
+
+\section{Experimental Setup}
+\subsection{Dataset}
+We use the Kaggle Alzheimer MRI dataset (four classes: Non-Demented, Very Mild,
+Mild, Moderate Demented).% TODO: cite exact dataset + version + class counts
+\textbf{TODO:} report exact per-class counts and, critically, whether the split
+is \emph{patient-level} or \emph{image-level}. Image-level splitting on this
+dataset risks leakage (augmented slices of one subject across train/test) and
+must be addressed or explicitly disclosed.
+
+\subsection{Protocol}
+\textbf{TODO: reconcile.} The capstone reports both an 80/20 and a 50/20/30
+split. Fix one. For a journal we recommend stratified \textbf{5-fold
+cross-validation}, reporting mean~$\pm$~std. Metrics: overall accuracy, and
+per-class precision, recall, and F1, plus macro-averaged F1 and confusion
+matrices.
+
+\section{Results}
+\subsection{Effect of Fuzzy Adaptive Resampling}
+Table~\ref{tab:main} summarises the improvement over the imbalanced baseline.
+% TODO: all numbers below must come from ONE clean reproducible run.
+\begin{table}[t]
+\caption{MobileNetV2 with vs.\ without fuzzy adaptive resampling.}
+\label{tab:main}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Metric & Without Fuzzy & With Fuzzy & $\Delta$ \\
+\midrule
+Overall Accuracy        & 63\% & 86\% & +23 \\
+Macro-Avg F1            & 0.49 & 0.85 & +0.36 \\
+Moderate Dem.\ Recall   & 0\%  & 90\% & +90 \\
+Very Mild Dem.\ F1      & 0.17 & 0.88 & +0.71 \\
+Mild Dem.\ Precision    & 0.06 & 0.89 & +0.83 \\
+Non-Demented Specificity& 67\% & 96\% & +29 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Comparison with Standard Imbalance Methods}
+\textbf{TODO (required for a journal):} report the fuzzy controller against
+no-balancing, class weights, random oversampling, SMOTE, and focal loss on
+identical folds. Without this table a reviewer cannot judge whether the fuzzy
+step beats simpler alternatives.
+\begin{table}[t]
+\caption{Fuzzy resampling vs.\ standard imbalance baselines (TODO: fill).}
+\label{tab:baselines}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Method & Accuracy & Macro-F1 \\
+\midrule
+No balancing            & TODO & TODO \\
+Class weights           & TODO & TODO \\
+Random oversampling     & TODO & TODO \\
+SMOTE                   & TODO & TODO \\
+Focal loss              & TODO & TODO \\
+\textbf{Fuzzy (ours)}   & TODO & TODO \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion and Limitations}
+The adaptive controller substantially improves recall on rare stages and yields
+clinically reasonable errors (confusions concentrate on adjacent stages).
+However, several limitations temper the claims. First, the fuzzy policy is, in
+the limit, close to proportional oversampling; the baseline comparison
+(Table~\ref{tab:baselines}) is needed to establish that the fuzzy formulation
+adds value. Second, results on the Kaggle dataset may be optimistic due to
+potential subject-level leakage; external validation on an independent cohort
+(e.g., ADNI/OASIS with patient-level splits) would strengthen the work. Third,
+the membership functions are hand-set; sensitivity to their parameters should be
+reported. Finally, this is a research/educational system and not a validated
+diagnostic device.
+
+\section{Conclusion}
+We presented a lightweight, interpretable fuzzy controller for adaptive
+class-rebalancing in Alzheimer's MRI staging, integrated with MobileNetV2. The
+method recovers recall on rare dementia stages that a naive CNN misses. Pending
+the baseline comparison and cross-validated, leakage-controlled evaluation, the
+approach offers a simple and reproducible route to robust staging under class
+imbalance.
+
+\section*{Reproducibility}
+Code and a live demo are available at
+\url{https://github.com/shvm-k/AlzDetect}.
+
+\begin{thebibliography}{10}
+\small
+% TODO: replace each entry with full author list, venue, year, pages, DOI.
+\bibitem{ref1} ``Classification of Alzheimer's Disease Using Deep Learning based
+Edge Detection and Fuzzy Neural Network,'' TODO.
+\bibitem{ref2} ``FP-CNN: Fuzzy pooling-based convolutional neural network for
+lung ultrasound image classification with explainable AI,'' TODO.
+\bibitem{ref3} ``Fuzzy Deep Learning for the Diagnosis of Alzheimer's Disease:
+Approaches and Challenges,'' TODO.
+\bibitem{ref4} ``Integration of fuzzy logic and a convolutional neural network in
+three-way decision-making,'' TODO.
+\bibitem{ref5} ``Machine Learning Technique for Alzheimer's Disease (AD) --- A
+Comprehensive Review,'' TODO.
+\bibitem{ref6} ``Fuzzy Logic Module of Convolutional Neural Network for
+Handwritten Digits Recognition,'' TODO.
+\bibitem{ref7} ``A Convolutional Fuzzy Neural Network for Image Classification,''
+TODO.
+\bibitem{ref8} ``Review: Deep Learning and Fuzzy Logic Applications,'' TODO.
+\bibitem{ref9} ``Transfer Learning based Image Visualization using CNN,'' TODO.
+\bibitem{ref10} ``Convolutional Neural Network and Fuzzy Logic-based Hybrid
+Melanoma Diagnosis System,'' TODO.
+\end{thebibliography}
+
+\end{document}
