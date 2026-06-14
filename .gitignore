@@ -3,8 +3,7 @@ __pycache__/
 .venv/
 venv/
 .env
-# Trained weights (large, add manually)
-backend/models/*.keras
+# Large trained weights (add manually if needed)
 backend/models/*.h5
 .DS_Store
 .venv/
