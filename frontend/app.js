@@ -41,6 +41,7 @@ function handleFile(file) {
   selectedFile = file;
   preview.src = URL.createObjectURL(file);
   previewWrap.classList.remove("hidden");
+  dropzone.classList.add("has-file");
   analyzeBtn.disabled = false;
   results.classList.add("hidden");
   emptyState.classList.remove("hidden");
