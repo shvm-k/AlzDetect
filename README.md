@@ -48,6 +48,15 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > manuscript and a "Threats to Validity" discussion. A controlled comparison
 > script is in `experiments/`.
 
+> 🔁 **Note on the live deployed model:** the original `sachinkumar413/alzheimer-mri-dataset`
+> used above has since been removed from Kaggle. The model currently served by
+> the web app (`backend/models/alz_mobilenetv2.keras`) was retrained on a mirror
+> dataset (`legendahmed/alzheimermridataset`) using the same fuzzy-resampling
+> pipeline (see `experiments/train_fuzzy_model_allimages.py`), and scores
+> **68% accuracy / 0.65 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
+> split. The 92% figure above is not reproducible until the original dataset
+> resurfaces or an equivalent replacement is found.
+
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>
 </p>
