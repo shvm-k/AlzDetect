@@ -36,10 +36,17 @@ The dataset used is the **Alzheimer MRI Dataset** from [Kaggle](https://www.kagg
 
 ## 📊 Results
 
-| Model                       | Accuracy | Precision | Recall | F1-Score |
-|----------------------------|----------|-----------|--------|----------|
-| MobileNetV2 (baseline)     | 94.2%    | 0.93      | 0.94   | 0.935    |
-| MobileNetV2 + Fuzzy Logic  | **96.1%**| **0.95**  | **0.96** | **0.955** |
+Measured from the project notebooks (macro-averaged over the 4 classes):
+
+| Model                       | Dataset            | Accuracy | Macro-F1 | Moderate-Dem. Recall |
+|----------------------------|--------------------|----------|----------|----------------------|
+| MobileNetV2 (baseline)     | full, imbalanced   | 56%      | 0.25     | 0%                   |
+| MobileNetV2 + Fuzzy Logic  | balanced subset    | **92%**  | **0.93** | **92%**              |
+
+> ⚠️ The two rows are **not a like-for-like comparison** (they differ in dataset
+> size, evaluation distribution, and architecture). See `paper/` for the full
+> manuscript and a "Threats to Validity" discussion. A controlled comparison
+> script is in `experiments/`.
 
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>

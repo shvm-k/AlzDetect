@@ -97,10 +97,19 @@ def is_demo_mode():
 
 
 def preprocess(image_bytes):
-    """Bytes -> (1, 128, 128, 3) float32 array, matching notebook preprocessing."""
+    """Bytes -> (1, 128, 128, 3) float32 array, matching the fuzzy notebook.
+
+    IMPORTANT: the fuzzy MobileNetV2 model (the one deployed for live mode) was
+    trained on RAW 0-255 pixel values — it defines an ImageDataGenerator with
+    rescale=1/255 but never applies it in model.fit(). To get correct
+    predictions we must replicate that exactly and NOT normalize here.
+    If you retrain with proper 1/255 normalization, set NORMALIZE=True.
+    """
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     img = img.resize((IMG_SIZE, IMG_SIZE))
-    arr = np.asarray(img, dtype=np.float32) / 255.0
+    arr = np.asarray(img, dtype=np.float32)
+    if os.environ.get("NORMALIZE", "0") == "1":
+        arr = arr / 255.0
     return np.expand_dims(arr, axis=0)
 
 
