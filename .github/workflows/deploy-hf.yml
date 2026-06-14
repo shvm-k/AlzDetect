@@ -42,7 +42,7 @@ jobs:
           # Rewrite model weights in this throwaway checkout's history to LFS
           # pointers before pushing (does not affect the GitHub repo).
           git lfs install --local
-          git lfs migrate import --include="*.keras,*.h5" --everything
+          yes | git lfs migrate import --include="*.keras,*.h5" --everything
           # Strip any stray whitespace/newlines from the secret (a trailing
           # newline is what caused the earlier "Malformed input to a URL" error).
           TOKEN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
