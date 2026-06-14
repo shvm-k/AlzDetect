@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlzDetect // Neural MRI Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css?v=6" />
+</head>
+<body>
+  <!-- ===== TOP BAR ===== -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <span class="mark">◤◢</span>
+      <span class="wordmark">ALZDETECT</span>
+      <span class="ver">v0.1</span>
+    </div>
+    <div class="topbar-right">
+      <span class="chip chip-model">NET / MOBILENETV2</span>
+      <span id="mode-badge" class="chip chip-demo hidden"></span>
+      <span class="chip chip-live"><i class="dot"></i> SYSTEM ONLINE</span>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1>NEURAL MRI<br />ANALYSIS<span class="blink">_</span></h1>
+      <p class="hero-sub">
+        Upload a brain MRI. A convolutional neural net classifies the
+        Alzheimer's stage and shows you <strong>exactly where it looked.</strong>
+      </p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat stat-a"><b>68%</b><span>ACCURACY*</span></div>
+      <div class="stat stat-b"><b>4</b><span>STAGES</span></div>
+      <div class="stat stat-c"><b>&lt;1s</b><span>INFERENCE</span></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== WORKBENCH ===== -->
+    <section class="bench">
+      <!-- INPUT -->
+      <div class="panel panel-input">
+        <div class="panel-tab">01 // INPUT</div>
+        <div class="uploader" id="dropzone">
+          <input type="file" id="file-input" accept="image/*" hidden />
+          <div class="upload-inner">
+            <div class="upload-icon">⌖</div>
+            <p class="upload-cta">DROP MRI SCAN</p>
+            <p class="hint">click to browse · png / jpg · max 10&nbsp;mb</p>
+          </div>
+          <div class="preview-wrap hidden" id="preview-wrap">
+            <img id="preview" alt="preview" />
+            <div class="scanline"></div>
+            <span class="replace-tag">click to replace</span>
+          </div>
+        </div>
+        <button id="analyze-btn" class="primary" disabled>
+          <span>▶ RUN ANALYSIS</span>
+        </button>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="panel panel-output">
+        <div class="panel-tab">02 // OUTPUT</div>
+        <div id="empty-state" class="empty">
+          <div class="empty-glyph">◢◣◤◥</div>
+          <p>AWAITING INPUT</p>
+          <span>results render here</span>
+        </div>
+
+        <div id="results" class="results hidden">
+          <div class="verdict">
+            <div class="verdict-main">
+              <span class="muted">PREDICTED STAGE</span>
+              <p id="prediction" class="prediction">—</p>
+            </div>
+            <div class="verdict-conf">
+              <span class="muted">CONFIDENCE</span>
+              <p id="confidence" class="confidence">—</p>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>CLASS DISTRIBUTION</h3>
+            <div id="bars"></div>
+          </div>
+
+          <div id="heatmap-block" class="block hidden">
+            <h3>ATTENTION MAP // GRAD-CAM</h3>
+            <img id="heatmap" alt="attention heatmap" />
+            <p class="hint">warmer = stronger influence on the verdict</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p id="error" class="error hidden"></p>
+
+    <!-- ===== MODEL CARD ===== -->
+    <section class="specs">
+      <div class="spec"><span class="spec-k">ARCHITECTURE</span><span class="spec-v">MobileNetV2 + transfer learning</span></div>
+      <div class="spec"><span class="spec-k">CLASSES</span><span class="spec-v">Non · Very Mild · Mild · Moderate</span></div>
+      <div class="spec"><span class="spec-k">INPUT</span><span class="spec-v">128×128 RGB · normalized</span></div>
+      <div class="spec"><span class="spec-k">EXPLAINABILITY</span><span class="spec-v">Grad-CAM saliency</span></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="disclaimer">
+      <span class="warn">⚠ NOT A MEDICAL DEVICE</span>
+      Research &amp; educational tool only. Predictions must not be used for
+      clinical diagnosis. *68% accuracy on a held-out split of a fuzzy-rebalanced
+      training set; the 92% figure in the paper was measured on a different
+      (now-removed) Kaggle dataset and is not reproducible with current data.
+      Always consult a qualified healthcare professional.
+    </div>
+    <p class="colophon">ALZDETECT · MOBILENETV2 · FASTAPI · BUILT FOR RESEARCH</p>
+  </footer>
+
+  <script src="/static/app.js?v=6"></script>
+</body>
+</html>

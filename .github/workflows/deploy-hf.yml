@@ -1,0 +1,52 @@
+name: Deploy to Hugging Face Space
+
+# Auto-syncs this repo to a Hugging Face Space on every push to the branch.
+# One-time setup (see deploy/DEPLOY.md):
+#   1. Create an empty Docker Space named "AlzDetect" at huggingface.co/new-space
+#   2. In this GitHub repo: Settings -> Secrets and variables -> Actions, add:
+#        HF_TOKEN     = a Hugging Face token with "write" scope   (REQUIRED)
+#   Username/Space default to SHVMK/AlzDetect below; override with the
+#   HF_USERNAME / HF_SPACE secrets if you rename them.
+
+on:
+  push:
+    branches:
+      - claude/upbeat-newton-f7gyub
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: ${{ secrets.HF_USERNAME || 'SHVMK' }}
+          HF_SPACE: ${{ secrets.HF_SPACE || 'AlzDetect' }}
+        run: |
+          set -e
+          # The Space's README.md must carry HF frontmatter.
+          cp deploy/huggingface-space-README.md README.md
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add README.md
+          # HF Spaces rejects files >10MB without Git LFS. Rather than deal
+          # with LFS on the Space repo, keep model weights out of the Space
+          # entirely -- the app downloads them at boot via MODEL_URL (set in
+          # the Space's settings) pointing at this GitHub repo's raw file.
+          git rm -r --cached --ignore-unmatch backend/models/*.keras backend/models/*.h5 >/dev/null
+          git commit -m "Sync to Hugging Face Space" || echo "nothing to commit"
+          # Strip any stray whitespace/newlines from the secret (a trailing
+          # newline is what caused the earlier "Malformed input to a URL" error).
+          TOKEN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          USER="$(printf '%s' "$HF_USERNAME" | tr -d '[:space:]')"
+          SPACE="$(printf '%s' "$HF_SPACE" | tr -d '[:space:]')"
+          export GIT_TERMINAL_PROMPT=0
+          REMOTE="https://${USER}:${TOKEN}@huggingface.co/spaces/${USER}/${SPACE}"
+          git push --force "$REMOTE" HEAD:main
