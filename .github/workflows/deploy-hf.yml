@@ -50,5 +50,5 @@ jobs:
           SPACE="$(printf '%s' "$HF_SPACE" | tr -d '[:space:]')"
           export GIT_TERMINAL_PROMPT=0
           REMOTE="https://${USER}:${TOKEN}@huggingface.co/spaces/${USER}/${SPACE}"
+          git lfs push "$REMOTE" HEAD:main
           git push --force "$REMOTE" HEAD:main
-          git lfs push --force "$REMOTE" HEAD:main
