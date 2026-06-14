@@ -23,7 +23,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Push to Hugging Face Space
         env:
@@ -37,12 +36,12 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
           git add README.md
+          # HF Spaces rejects files >10MB without Git LFS. Rather than deal
+          # with LFS on the Space repo, keep model weights out of the Space
+          # entirely -- the app downloads them at boot via MODEL_URL (set in
+          # the Space's settings) pointing at this GitHub repo's raw file.
+          git rm -r --cached --ignore-unmatch backend/models/*.keras backend/models/*.h5 >/dev/null
           git commit -m "Sync to Hugging Face Space" || echo "nothing to commit"
-          # HF Spaces rejects files >10MB unless tracked via Git LFS.
-          # Rewrite model weights in this throwaway checkout's history to LFS
-          # pointers before pushing (does not affect the GitHub repo).
-          git lfs install --local
-          yes | git lfs migrate import --include="*.keras,*.h5" --everything
           # Strip any stray whitespace/newlines from the secret (a trailing
           # newline is what caused the earlier "Malformed input to a URL" error).
           TOKEN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
@@ -50,5 +49,4 @@ jobs:
           SPACE="$(printf '%s' "$HF_SPACE" | tr -d '[:space:]')"
           export GIT_TERMINAL_PROMPT=0
           REMOTE="https://${USER}:${TOKEN}@huggingface.co/spaces/${USER}/${SPACE}"
-          git lfs push "$REMOTE" HEAD
           git push --force "$REMOTE" HEAD:main
