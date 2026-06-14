@@ -12,18 +12,22 @@ to match what the code **actually does** and to survive peer review.
 ## Before you submit — the TODO checklist
 Search the `.tex` for `TODO`. Each one is a blocker. Grouped by priority:
 
-### 🔴 Must fix (or you get rejected)
-- [ ] **One set of numbers.** Your three sources disagree:
-  abstract 56→92%, results table 63→86%, GitHub README 94.2→96.1%.
-  Do **one** clean run and make every number match it.
-- [ ] **Baseline comparison table** (Table II): fuzzy vs. no-balancing, class
-  weights, random oversampling, SMOTE, focal loss — on identical folds.
-  This is the experiment that justifies the whole paper.
-- [ ] **Leakage check.** Split by *patient*, not by image, or explicitly disclose
-  the limitation. The Kaggle AD set is known for train/test leakage.
-- [ ] **Removed overclaims** — already done in this draft. Do **not** add back
-  "attention gates", "learned/dynamic membership functions", or "image-quality
-  confidence scoring": the code does none of these.
+### ✅ Done (numbers now sourced from your real notebooks)
+- Numbers reconciled to your **actual runs**: baseline **56%** (macro-F1 0.25),
+  fuzzy **92%** (macro-F1 0.93); moderate-dementia recall 0% → 92%. The abstract's
+  56→92% pair was the correct one; the 63→86% and 94.2→96.1% figures were dropped.
+- Overclaims removed (no attention gates / learned membership functions).
+- A **Threats to Validity** section now honestly states the confounds.
+
+### 🔴 Still must address for a strong paper
+- [ ] **The confound is the #1 issue.** Your baseline and fuzzy runs differ in
+  dataset size, test distribution, AND architecture/loss — not just fuzzy vs.
+  no-fuzzy. The current draft discloses this honestly, but the *strong* version
+  needs the controlled experiment (`experiments/run_experiments.py`): identical
+  architecture + data, only the balancing varies, vs. class weights / SMOTE /
+  focal loss, under k-fold CV. This fills Table II and turns the paper from
+  "suggestive" into "convincing".
+- [ ] **Leakage check.** Split by *patient*, not by image, or keep the disclosure.
 
 ### 🟡 Strongly recommended
 - [ ] 5-fold cross-validation, report mean ± std (not a single split).
