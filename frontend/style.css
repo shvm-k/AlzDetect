@@ -212,4 +212,77 @@ footer { max-width: 1140px; margin: 0 auto; padding: 10px 4vw 56px; }
   font-weight: 700; letter-spacing: 1px; padding: 3px 8px; margin-right: 8px; }
 .colophon { text-align: center; font-size: 11px; letter-spacing: 2px; color: #888; margin: 22px 0 0; }
 
+/* ===================== GITHUB CHIP ===================== */
+.chip-gh { background: var(--bg); color: var(--ink); text-decoration: none;
+  border-color: var(--bg); cursor: pointer; }
+.chip-gh:hover { background: var(--cyan); }
+
+/* ===================== SAMPLE BUTTONS ===================== */
+.samples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+.samples-label { font: 700 10px "JetBrains Mono", monospace; letter-spacing: 1px;
+  color: #666; margin-right: 2px; }
+.sample-btn {
+  font: 700 11px "JetBrains Mono", monospace; letter-spacing: 1px;
+  padding: 7px 11px; background: var(--paper); color: var(--ink);
+  border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); cursor: pointer;
+  transition: transform .06s, box-shadow .06s, background .1s;
+}
+.sample-btn:hover { background: var(--yellow); transform: translate(-1px,-1px);
+  box-shadow: 4px 4px 0 var(--ink); }
+.sample-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ===================== VALIDATION SLOT ===================== */
+.validation {
+  margin: 12px 0 0; padding: 9px 12px; font: 600 11px "JetBrains Mono", monospace;
+  letter-spacing: .5px; color: #777; background: var(--bg);
+  border: 2px dashed var(--grey);
+}
+.validation.invalid { color: var(--ink); background: #ffe08a;
+  border: 2px solid var(--ink); font-weight: 700; text-transform: uppercase; }
+
+/* ===================== GHOST GRAD-CAM HINT ===================== */
+.ghost-scan {
+  position: relative; width: 150px; height: 150px; margin: 0 auto 8px;
+  border: var(--bd); background:
+    radial-gradient(circle at 50% 42%, #2a2a2a 0 30%, #161616 55%, #0a0a0a 100%);
+  overflow: hidden; opacity: .85;
+}
+.ghost-heat {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 42% 46%, rgba(255,60,0,.85) 0 7%, rgba(255,160,0,.5) 16%, transparent 30%),
+    radial-gradient(circle at 60% 55%, rgba(255,210,30,.7) 0 6%, transparent 22%),
+    radial-gradient(circle at 50% 40%, rgba(47,230,214,.35) 0 18%, transparent 40%);
+  mix-blend-mode: screen; filter: blur(1px);
+  animation: ghostpulse 2.6s ease-in-out infinite;
+}
+@keyframes ghostpulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+.ghost-tag {
+  position: absolute; bottom: 6px; left: 6px;
+  font: 700 8px "JetBrains Mono", monospace !important; letter-spacing: 1px;
+  background: var(--ink); color: var(--cyan); padding: 3px 6px;
+}
+
+/* ===================== SPEC NOTE (FUZZY NUANCE) ===================== */
+.spec-note {
+  margin: 16px 0 0; padding: 13px 16px; font-size: 12.5px; line-height: 1.55;
+  background: var(--paper); border: var(--bd); border-left: var(--bd-thick);
+  box-shadow: var(--sh);
+}
+.info-i { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--cyan);
+  background: var(--ink); padding: 0 5px; margin-right: 4px; }
+
+/* ===================== FOOTER LINKS ===================== */
+.links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
+.link-btn {
+  font: 700 12px "JetBrains Mono", monospace; letter-spacing: 1px; text-decoration: none;
+  padding: 11px 16px; background: var(--ink); color: var(--paper);
+  border: var(--bd); box-shadow: var(--sh); text-transform: uppercase;
+  transition: transform .06s, box-shadow .06s, background .1s, color .1s;
+}
+.link-btn:hover { background: var(--cyan); color: var(--ink);
+  transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--ink); }
+.link-btn-alt { background: var(--paper); color: var(--ink); }
+.link-btn-alt:hover { background: var(--yellow); }
+
 .hidden { display: none !important; }
