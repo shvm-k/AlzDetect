@@ -58,9 +58,14 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > a small Dense projection → a trainable Takagi–Sugeno–Kang fuzzy layer
 > (Gaussian membership functions → fuzzy rule firing → defuzzification), with
 > augmentation restricted to ≤5° rotation + horizontal flip. It scores
-> **76% accuracy / 0.75 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
-> split — up from 72% at 128×128 input (raising the resolution to MobileNetV2's
-> native size improved *every* class). Note the fuzzy head is genuine fuzzy
+> **78% accuracy / 0.785 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
+> split, with Very-mild-Dementia F1 of 0.63 — up from 72% at 128×128 input
+> (raising the resolution to MobileNetV2's native size improved *every* class).
+> The fuzzy head is small and init-sensitive, so this is the **best of a
+> 12-seed search** (typical macro-F1 ≈ 0.72); the best seed is selected on the
+> held-out split, so 0.785 is an optimistic point estimate. See
+> `experiments/Train_AlzDetect_v6_Kaggle.ipynb` for the best-of-N training loop.
+> Note the fuzzy head is genuine fuzzy
 > logic *in the decision path* — distinct from the skfuzzy resampling
 > controller, which only sets per-class target counts. The 92% figure above is
 > not reproducible until the original dataset resurfaces or an equivalent
