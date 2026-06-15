@@ -7,8 +7,17 @@ const results    = document.getElementById("results");
 const emptyState = document.getElementById("empty-state");
 const errorEl    = document.getElementById("error");
 const modeBadge  = document.getElementById("mode-badge");
+const validation = document.getElementById("validation");
 
 let selectedFile = null;
+
+const MAX_BYTES = 10 * 1024 * 1024;
+const VALID_HINT = "PNG / JPG · max 10 MB · a single 2D axial brain slice";
+
+function setValidation(msg, invalid) {
+  validation.innerHTML = msg;
+  validation.classList.toggle("invalid", !!invalid);
+}
 
 // Demo / live badge.
 fetch("/api/health")
@@ -37,7 +46,19 @@ dropzone.addEventListener("drop", (e) => {
 });
 
 function handleFile(file) {
-  if (!file || !file.type.startsWith("image/")) return;
+  if (!file) return;
+  // Client-side validation -> the always-visible slot under the button.
+  if (!file.type.startsWith("image/")) {
+    setValidation("✗ UNSUPPORTED FILE — need a PNG or JPG image (not " +
+      (file.type || file.name.split(".").pop() || "?") + ")", true);
+    return;
+  }
+  if (file.size > MAX_BYTES) {
+    setValidation("✗ TOO LARGE — " + (file.size / 1048576).toFixed(1) +
+      " MB exceeds the 10 MB limit", true);
+    return;
+  }
+  setValidation(VALID_HINT, false);
   selectedFile = file;
   preview.src = URL.createObjectURL(file);
   previewWrap.classList.remove("hidden");
@@ -47,6 +68,27 @@ function handleFile(file) {
   emptyState.classList.remove("hidden");
   errorEl.classList.add("hidden");
 }
+
+// ---- Sample images: probe /static/samples/<key>.jpg, reveal only what exists.
+document.querySelectorAll(".sample-btn").forEach((btn) => {
+  const url = "/static/samples/" + btn.dataset.key + ".jpg";
+  fetch(url, { method: "HEAD" })
+    .then((r) => {
+      if (r.ok) {
+        btn.classList.remove("hidden");
+        document.getElementById("samples").classList.remove("hidden");
+      }
+    })
+    .catch(() => {});
+  btn.addEventListener("click", async () => {
+    try {
+      const blob = await (await fetch(url)).blob();
+      handleFile(new File([blob], btn.dataset.key + ".jpg", { type: blob.type }));
+    } catch {
+      setValidation("✗ Could not load that sample image", true);
+    }
+  });
+});
 
 analyzeBtn.addEventListener("click", async (e) => {
   e.stopPropagation();
