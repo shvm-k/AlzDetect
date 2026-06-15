@@ -35,13 +35,16 @@ jobs:
           cp deploy/huggingface-space-README.md README.md
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add README.md
-          # HF Spaces rejects files >10MB without Git LFS. Rather than deal
-          # with LFS on the Space repo, keep model weights out of the Space
-          # entirely -- the app downloads them at boot via MODEL_URL (set in
-          # the Space's settings) pointing at this GitHub repo's raw file.
-          git rm -r --cached --ignore-unmatch backend/models/*.keras backend/models/*.h5 >/dev/null
-          git commit -m "Sync to Hugging Face Space" || echo "nothing to commit"
+          # HF Spaces reject ANY file >10MB anywhere in the pushed history (not
+          # just the tip), and the model weights live in this repo's history.
+          # So we don't push our history at all: we build a single ORPHAN commit
+          # containing the current tree minus the weights, and force-push that.
+          # The app downloads the model at boot via MODEL_URL (set in the Space
+          # settings) pointing at this GitHub repo's raw file.
+          rm -f backend/models/*.keras backend/models/*.h5
+          git checkout --orphan hf-deploy
+          git add -A
+          git commit -m "Deploy to Hugging Face Space" >/dev/null
           # Strip any stray whitespace/newlines from the secret (a trailing
           # newline is what caused the earlier "Malformed input to a URL" error).
           TOKEN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
@@ -49,4 +52,4 @@ jobs:
           SPACE="$(printf '%s' "$HF_SPACE" | tr -d '[:space:]')"
           export GIT_TERMINAL_PROMPT=0
           REMOTE="https://${USER}:${TOKEN}@huggingface.co/spaces/${USER}/${SPACE}"
-          git push --force "$REMOTE" HEAD:main
+          git push --force "$REMOTE" hf-deploy:main
