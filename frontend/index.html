@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=8" />
+  <link rel="stylesheet" href="/static/style.css?v=9" />
 </head>
 <body>
   <!-- ===== TOP BAR ===== -->
@@ -34,7 +34,7 @@
       </p>
     </div>
     <div class="hero-stats">
-      <div class="stat stat-a"><b>72%</b><span>ACCURACY*</span></div>
+      <div class="stat stat-a"><b>76%</b><span>ACCURACY*</span></div>
       <div class="stat stat-b"><b>4</b><span>STAGES</span></div>
       <div class="stat stat-c"><b>&lt;1s</b><span>INFERENCE</span></div>
     </div>
@@ -105,7 +105,7 @@
     <section class="specs">
       <div class="spec"><span class="spec-k">ARCHITECTURE</span><span class="spec-v">MobileNetV2 + fuzzy inference head</span></div>
       <div class="spec"><span class="spec-k">CLASSES</span><span class="spec-v">Non · Very Mild · Mild · Moderate</span></div>
-      <div class="spec"><span class="spec-k">INPUT</span><span class="spec-v">128×128 RGB · normalized</span></div>
+      <div class="spec"><span class="spec-k">INPUT</span><span class="spec-v">224×224 RGB</span></div>
       <div class="spec"><span class="spec-k">EXPLAINABILITY</span><span class="spec-v">Grad-CAM saliency</span></div>
     </section>
   </main>
@@ -114,7 +114,7 @@
     <div class="disclaimer">
       <span class="warn">⚠ NOT A MEDICAL DEVICE</span>
       Research &amp; educational tool only. Predictions must not be used for
-      clinical diagnosis. *72% accuracy on a held-out split of a fuzzy-rebalanced
+      clinical diagnosis. *76% accuracy on a held-out split of a fuzzy-rebalanced
       training set; the 92% figure in the paper was measured on a different
       (now-removed) Kaggle dataset and is not reproducible with current data.
       Always consult a qualified healthcare professional.
@@ -122,6 +122,6 @@
     <p class="colophon">ALZDETECT · MOBILENETV2 · FASTAPI · BUILT FOR RESEARCH</p>
   </footer>
 
-  <script src="/static/app.js?v=8"></script>
+  <script src="/static/app.js?v=9"></script>
 </body>
 </html>

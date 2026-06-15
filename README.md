@@ -52,18 +52,19 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > used above has since been removed from Kaggle. The model currently served by
 > the web app (`backend/models/alz_mobilenetv2.keras`) was retrained on a mirror
 > dataset (`legendahmed/alzheimermridataset`) using the same fuzzy-resampling
-> pipeline. The current best model adds a **real fuzzy inference head**
-> (see `experiments/train_fuzzy_model_v4.py` and `backend/fuzzy_layer.py`):
-> frozen MobileNetV2 features → SMOTE balancing in feature space → a small
-> Dense projection → a trainable Takagi–Sugeno–Kang fuzzy layer (Gaussian
-> membership functions → fuzzy rule firing → defuzzification), with augmentation
-> restricted to ≤5° rotation + horizontal flip. It scores
-> **72% accuracy / 0.71 macro-F1 / 0.90 Moderate-Dem. recall** on its held-out
-> split (vs 71% for the earlier Dense head, 68% for the file-repetition
-> baseline). Note this is genuine fuzzy logic *in the classification path* —
-> distinct from the skfuzzy resampling controller, which only sets per-class
-> target counts. The 92% figure above is not reproducible until the original
-> dataset resurfaces or an equivalent replacement is found.
+> pipeline, with a **real fuzzy inference head** in the classification path
+> (see `experiments/train_fuzzy_model_v6.py` and `backend/fuzzy_layer.py`):
+> **224×224** frozen MobileNetV2 features → SMOTE balancing in feature space →
+> a small Dense projection → a trainable Takagi–Sugeno–Kang fuzzy layer
+> (Gaussian membership functions → fuzzy rule firing → defuzzification), with
+> augmentation restricted to ≤5° rotation + horizontal flip. It scores
+> **76% accuracy / 0.75 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
+> split — up from 72% at 128×128 input (raising the resolution to MobileNetV2's
+> native size improved *every* class). Note the fuzzy head is genuine fuzzy
+> logic *in the decision path* — distinct from the skfuzzy resampling
+> controller, which only sets per-class target counts. The 92% figure above is
+> not reproducible until the original dataset resurfaces or an equivalent
+> replacement is found.
 
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>
