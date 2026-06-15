@@ -27,6 +27,8 @@ CLASS_NAMES = [
 ]
 
 IMG_SIZE = 128
+# Overwritten at load time from the model's actual input shape (see load_model).
+_input_size = IMG_SIZE
 MODELS_DIR = os.path.join(os.path.dirname(__file__), "models")
 
 # Lazily-populated globals.
@@ -95,7 +97,16 @@ def load_model():
 
         _model = keras_load_model(weights)
         _demo_mode = False
-        print(f"[AlzDetect] Loaded model from {weights}")
+        # Adapt preprocessing to whatever input size the model expects (e.g. a
+        # 224x224 model deploys with no code change). Falls back to IMG_SIZE.
+        try:
+            shape = _model.inputs[0].shape
+            if shape[1] is not None:
+                global _input_size
+                _input_size = int(shape[1])
+        except Exception:
+            pass
+        print(f"[AlzDetect] Loaded model from {weights} (input {_input_size}px)")
     except Exception as exc:  # pragma: no cover - defensive
         print(f"[AlzDetect] Failed to load model ({exc}); falling back to demo mode.")
         _demo_mode = True
@@ -115,7 +126,7 @@ def preprocess(image_bytes):
     If you retrain with proper 1/255 normalization, set NORMALIZE=True.
     """
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    img = img.resize((IMG_SIZE, IMG_SIZE))
+    img = img.resize((_input_size, _input_size))
     arr = np.asarray(img, dtype=np.float32)
     if os.environ.get("NORMALIZE", "0") == "1":
         arr = arr / 255.0
@@ -185,12 +196,12 @@ def gradcam(image_bytes):
 
         # Upsample heatmap and overlay on the original image.
         heat_img = Image.fromarray(np.uint8(255 * heatmap)).resize(
-            (IMG_SIZE, IMG_SIZE)
+            (_input_size, _input_size)
         )
         heat = np.asarray(heat_img, dtype=np.float32) / 255.0
         base = np.asarray(
             Image.open(io.BytesIO(image_bytes)).convert("RGB").resize(
-                (IMG_SIZE, IMG_SIZE)
+                (_input_size, _input_size)
             ),
             dtype=np.float32,
         )
