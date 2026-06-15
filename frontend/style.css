@@ -272,6 +272,20 @@ footer { max-width: 1140px; margin: 0 auto; padding: 10px 4vw 56px; }
 .info-i { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--cyan);
   background: var(--ink); padding: 0 5px; margin-right: 4px; }
 
+/* ===================== LIMITATIONS TOGGLE ===================== */
+.limits { margin-top: 14px; border: var(--bd); background: var(--paper); box-shadow: var(--sh); }
+.limits summary {
+  cursor: pointer; padding: 12px 16px; list-style: none;
+  font: 700 12px "JetBrains Mono", monospace; letter-spacing: 1px;
+  background: var(--ink); color: var(--cyan); text-transform: uppercase;
+}
+.limits summary::-webkit-details-marker { display: none; }
+.limits[open] summary { border-bottom: var(--bd); }
+.limits-body { padding: 14px 18px; font-size: 13px; line-height: 1.55; }
+.limits-body p { margin: 0 0 10px; }
+.limits-body ul { margin: 0 0 10px; padding-left: 18px; }
+.limits-body li { margin-bottom: 7px; }
+
 /* ===================== FOOTER LINKS ===================== */
 .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
 .link-btn {

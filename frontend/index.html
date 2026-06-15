@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=12" />
+  <link rel="stylesheet" href="/static/style.css?v=13" />
 </head>
 <body>
   <!-- ===== TOP BAR ===== -->
@@ -144,6 +144,30 @@
       other scanners/datasets can be confidently wrong (a known domain-shift
       limitation). Always consult a qualified healthcare professional.
     </div>
+    <details class="limits">
+      <summary>▸ TECHNICAL LIMITATIONS &amp; DOMAIN SHIFT</summary>
+      <div class="limits-body">
+        <p>The model is tuned to the <strong>intensity histogram and contrast
+        matrix</strong> of a single OASIS-derived Kaggle MRI subset. It learns
+        cues localized to that distribution rather than scanner-independent
+        atrophy biomarkers.</p>
+        <ul>
+          <li><strong>Cross-institution scans</strong> (different scanner, field
+          strength, or vendor) shift the input statistics and trigger
+          out-of-distribution errors — often with <em>high</em> confidence.</li>
+          <li><strong>Different preprocessing</strong> (alternative
+          skull-stripping, bias-field correction, or intensity normalization)
+          produces the same effect.</li>
+          <li>Observed example: a textbook advanced-AD scan from another source
+          was classified <em>Non Demented</em> at 93% — a confident error that is
+          the signature of domain shift, <em>not</em> a label-mapping bug (the
+          index→label map is verified consistent with training, and
+          in-distribution accuracy is 78%).</li>
+        </ul>
+        <p>Closing this gap requires multi-source / multi-scanner training data
+        or explicit domain-generalization, not further architecture tuning.</p>
+      </div>
+    </details>
     <div class="links">
       <a class="link-btn" href="https://github.com/shvm-k/AlzDetect" target="_blank" rel="noopener">◢ RESEARCH &amp; CODE ON GITHUB</a>
       <a class="link-btn link-btn-alt" href="https://github.com/shvm-k/AlzDetect#readme" target="_blank" rel="noopener">◢ METHODS &amp; RESULTS</a>
@@ -151,6 +175,6 @@
     <p class="colophon">ALZDETECT · MOBILENETV2 · FASTAPI · BUILT FOR RESEARCH</p>
   </footer>
 
-  <script src="/static/app.js?v=12"></script>
+  <script src="/static/app.js?v=13"></script>
 </body>
 </html>
