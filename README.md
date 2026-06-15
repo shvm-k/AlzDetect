@@ -65,6 +65,11 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > 12-seed search** (typical macro-F1 ≈ 0.72); the best seed is selected on the
 > held-out split, so 0.785 is an optimistic point estimate. See
 > `experiments/Train_AlzDetect_v6_Kaggle.ipynb` for the best-of-N training loop.
+> **Generalization caveat:** this score is *in-distribution only* — the model
+> was trained and evaluated on a single MRI source. On scans from other
+> scanners/datasets it can be confidently wrong (e.g. calling an obvious AD scan
+> "Non Demented"), a classic domain-shift / shortcut-learning failure. Closing
+> this gap needs multi-source training data, not more architecture tuning.
 > Note the fuzzy head is genuine fuzzy
 > logic *in the decision path* — distinct from the skfuzzy resampling
 > controller, which only sets per-class target counts. The 92% figure above is
