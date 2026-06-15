@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=11" />
+  <link rel="stylesheet" href="/static/style.css?v=12" />
 </head>
 <body>
   <!-- ===== TOP BAR ===== -->
@@ -139,7 +139,10 @@
       on a held-out split of a fuzzy-rebalanced training set; the 92% figure in
       the paper was measured on a different
       (now-removed) Kaggle dataset and is not reproducible with current data.
-      Always consult a qualified healthcare professional.
+      This accuracy is <strong>in-distribution only</strong> — the model was
+      trained and tested on a single MRI source, and predictions on scans from
+      other scanners/datasets can be confidently wrong (a known domain-shift
+      limitation). Always consult a qualified healthcare professional.
     </div>
     <div class="links">
       <a class="link-btn" href="https://github.com/shvm-k/AlzDetect" target="_blank" rel="noopener">◢ RESEARCH &amp; CODE ON GITHUB</a>
@@ -148,6 +151,6 @@
     <p class="colophon">ALZDETECT · MOBILENETV2 · FASTAPI · BUILT FOR RESEARCH</p>
   </footer>
 
-  <script src="/static/app.js?v=11"></script>
+  <script src="/static/app.js?v=12"></script>
 </body>
 </html>
