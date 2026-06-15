@@ -28,7 +28,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 
 
-@tf.keras.saving.register_keras_serializable(package="alzdetect", name="FuzzyLayer")
+@tf.keras.utils.register_keras_serializable(package="alzdetect", name="FuzzyLayer")
 class FuzzyLayer(layers.Layer):
     def __init__(self, n_rules, n_classes, **kwargs):
         super().__init__(**kwargs)
