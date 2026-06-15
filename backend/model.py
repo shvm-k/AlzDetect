@@ -96,6 +96,20 @@ def load_model():
             from . import fuzzy_layer  # noqa: F401
 
         _model = keras_load_model(weights)
+
+        # GUARDRAIL: the served label order (CLASS_NAMES) is hard-coded to match
+        # the training index map (filename-prefix -> CLASS_ORDER in the training
+        # scripts). If a future model/serialization ever drifts out of sync, the
+        # output width won't equal len(CLASS_NAMES) -- refuse to serve wrong
+        # labels and fall back to clearly-badged demo mode rather than silently
+        # mislabelling predictions.
+        n_out = int(_model.output_shape[-1])
+        if n_out != len(CLASS_NAMES):
+            raise ValueError(
+                f"CRITICAL label-mapping drift: model outputs {n_out} classes "
+                f"but CLASS_NAMES defines {len(CLASS_NAMES)}. Refusing to serve."
+            )
+
         _demo_mode = False
         # Adapt preprocessing to whatever input size the model expects (e.g. a
         # 224x224 model deploys with no code change). Falls back to IMG_SIZE.

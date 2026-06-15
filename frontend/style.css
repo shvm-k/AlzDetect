@@ -13,6 +13,12 @@
   --bd-thick:5px solid var(--ink);
   --sh:      6px 6px 0 var(--ink);
   --sh-lg:   10px 10px 0 var(--ink);
+
+  /* clinical severity scale (Non → Moderate) */
+  --sev0:    #1f9d55;  /* normal  */
+  --sev1:    #d99500;  /* very mild */
+  --sev2:    #e8590c;  /* mild */
+  --sev3:    #c92a2a;  /* moderate */
 }
 
 * { box-sizing: border-box; }
@@ -161,35 +167,55 @@ main { max-width: 1140px; margin: 0 auto; padding: 0 4vw 40px; }
 .empty p { font: 700 16px "JetBrains Mono", monospace; letter-spacing: 3px; margin: 18px 0 4px; }
 .empty span { font: 500 12px "JetBrains Mono", monospace; color: #bbb; }
 
-/* ---- results ---- */
-.verdict { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
-.verdict-main, .verdict-conf { border: var(--bd); padding: 16px 18px; box-shadow: var(--sh); }
-.verdict-main { flex: 2; min-width: 160px; background: var(--yellow); }
-.verdict-conf { flex: 1; min-width: 110px; background: var(--cyan); }
-.muted { font-size: 10px; letter-spacing: 2px; display: block; margin-bottom: 6px; }
-.prediction { font-size: 25px; margin: 0; line-height: 1.05; text-transform: uppercase; }
-.confidence { font: 900 32px "Archivo Black", sans-serif; margin: 0; }
-
-.block { margin-top: 22px; }
-.block h3 { font-size: 12px; letter-spacing: 2px; margin: 0 0 14px; padding-bottom: 6px;
-  border-bottom: var(--bd); }
-.bar-row { margin-bottom: 14px; }
-.bar-label { display: flex; justify-content: space-between; font-size: 12px;
-  font-weight: 700; letter-spacing: .5px; margin-bottom: 5px; text-transform: uppercase; }
-.bar-track { height: 22px; border: var(--bd); background: var(--paper); overflow: hidden; }
-.bar-fill {
-  height: 100%; width: 0; background: var(--cyan);
-  background-image: repeating-linear-gradient(45deg,
-    rgba(255,255,255,0) 0 7px, rgba(0,0,0,.16) 7px 14px);
-  transition: width .5s steps(14);
+/* ---- results : clinical report styling ---- */
+.verdict { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+.verdict-main, .verdict-conf {
+  border: var(--bd); padding: 18px 20px; box-shadow: var(--sh);
+  background: var(--paper);
 }
-.bar-row:nth-child(1) .bar-fill { background-color: var(--yellow); }
-.bar-row:nth-child(2) .bar-fill { background-color: var(--cyan); }
-.bar-row:nth-child(3) .bar-fill { background-color: var(--ink); }
-.bar-row:nth-child(4) .bar-fill { background-color: var(--cyan); }
+.verdict-main { flex: 2; min-width: 180px; border-left: 10px solid var(--sev0); }
+.verdict-conf { flex: 1; min-width: 120px; }
+/* severity-driven accent on the verdict + a small status word */
+.verdict.sev-0 .verdict-main { border-left-color: var(--sev0); }
+.verdict.sev-1 .verdict-main { border-left-color: var(--sev1); }
+.verdict.sev-2 .verdict-main { border-left-color: var(--sev2); }
+.verdict.sev-3 .verdict-main { border-left-color: var(--sev3); }
+.muted { font-size: 10px; letter-spacing: 2px; display: block; margin-bottom: 8px; color: #555; }
+.prediction { font-size: 23px; margin: 0; line-height: 1.1; text-transform: uppercase; }
+.sev-tag { display: inline-block; margin-top: 9px; font: 700 10px "JetBrains Mono", monospace;
+  letter-spacing: 1px; padding: 3px 9px; color: #fff; text-transform: uppercase; }
+.verdict.sev-0 .sev-tag { background: var(--sev0); }
+.verdict.sev-1 .sev-tag { background: var(--sev1); }
+.verdict.sev-2 .sev-tag { background: var(--sev2); }
+.verdict.sev-3 .sev-tag { background: var(--sev3); }
+.confidence { font: 900 30px "Archivo Black", sans-serif; margin: 0; }
 
-#heatmap { width: 100%; max-width: 280px; border: var(--bd); box-shadow: var(--sh);
-  image-rendering: pixelated; }
+.block { margin-top: 24px; }
+.block h3 { font-size: 12px; letter-spacing: 2px; margin: 0 0 16px; padding-bottom: 8px;
+  border-bottom: 2px solid #e4ddca; color: #444; }
+
+/* clean, solid, severity-coloured probability rows */
+.bar-row { margin-bottom: 15px; }
+.bar-row.is-top .bar-label span:first-child::before {
+  content: "▸ "; color: #888;
+}
+.bar-label { display: flex; justify-content: space-between; font-size: 12.5px;
+  font-weight: 700; letter-spacing: .3px; margin-bottom: 6px; }
+.bar-label span:first-child { text-transform: none; }
+.bar-label span:last-child { font-family: "JetBrains Mono", monospace; color: #333; }
+.bar-track { height: 12px; border: 1px solid #cfc9b8; border-radius: 6px;
+  background: #f0ece0; overflow: hidden; }
+.bar-fill {
+  height: 100%; width: 0; border-radius: 6px; background: var(--grey);
+  transition: width .7s cubic-bezier(.22,.61,.36,1);
+}
+.bar-row.sev-0 .bar-fill { background: var(--sev0); }
+.bar-row.sev-1 .bar-fill { background: var(--sev1); }
+.bar-row.sev-2 .bar-fill { background: var(--sev2); }
+.bar-row.sev-3 .bar-fill { background: var(--sev3); }
+.bar-row:not(.is-top) { opacity: .72; }
+
+#heatmap { width: 100%; max-width: 300px; border: var(--bd); box-shadow: var(--sh); }
 
 /* ===================== SPECS ===================== */
 .specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
@@ -271,6 +297,20 @@ footer { max-width: 1140px; margin: 0 auto; padding: 10px 4vw 56px; }
 }
 .info-i { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--cyan);
   background: var(--ink); padding: 0 5px; margin-right: 4px; }
+
+/* ===================== LIMITATIONS TOGGLE ===================== */
+.limits { margin-top: 14px; border: var(--bd); background: var(--paper); box-shadow: var(--sh); }
+.limits summary {
+  cursor: pointer; padding: 12px 16px; list-style: none;
+  font: 700 12px "JetBrains Mono", monospace; letter-spacing: 1px;
+  background: var(--ink); color: var(--cyan); text-transform: uppercase;
+}
+.limits summary::-webkit-details-marker { display: none; }
+.limits[open] summary { border-bottom: var(--bd); }
+.limits-body { padding: 14px 18px; font-size: 13px; line-height: 1.55; }
+.limits-body p { margin: 0 0 10px; }
+.limits-body ul { margin: 0 0 10px; padding-left: 18px; }
+.limits-body li { margin-bottom: 7px; }
 
 /* ===================== FOOTER LINKS ===================== */
 .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 22px; }
