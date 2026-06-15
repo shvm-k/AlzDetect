@@ -52,10 +52,14 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > used above has since been removed from Kaggle. The model currently served by
 > the web app (`backend/models/alz_mobilenetv2.keras`) was retrained on a mirror
 > dataset (`legendahmed/alzheimermridataset`) using the same fuzzy-resampling
-> pipeline (see `experiments/train_fuzzy_model_allimages.py`), and scores
-> **68% accuracy / 0.65 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
-> split. The 92% figure above is not reproducible until the original dataset
-> resurfaces or an equivalent replacement is found.
+> pipeline. The current best model uses a "medical-safe" variant
+> (see `experiments/train_fuzzy_model_v3.py`): frozen MobileNetV2 features,
+> SMOTE balancing in feature space, and a small Dense(32, swish) adapter head,
+> with augmentation restricted to ≤5° rotation + horizontal flip. It scores
+> **71% accuracy / 0.70 macro-F1 / 0.94 Moderate-Dem. recall** on its held-out
+> split (up from an earlier 68% file-repetition baseline). The 92% figure above
+> is not reproducible until the original dataset resurfaces or an equivalent
+> replacement is found.
 
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>
