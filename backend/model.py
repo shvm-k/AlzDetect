@@ -84,6 +84,15 @@ def load_model():
     try:
         from tensorflow.keras.models import load_model as keras_load_model
 
+        # Importing this registers the custom FuzzyLayer so models that use the
+        # fuzzy inference head deserialize without an explicit custom_objects.
+        # backend/ is imported as a flat module set (app.py does `import model`),
+        # so a plain import works; guard it in case a fuzzy head isn't present.
+        try:
+            import fuzzy_layer  # noqa: F401
+        except ImportError:
+            from . import fuzzy_layer  # noqa: F401
+
         _model = keras_load_model(weights)
         _demo_mode = False
         print(f"[AlzDetect] Loaded model from {weights}")
