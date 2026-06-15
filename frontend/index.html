@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Archivo+Black&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/style.css?v=13" />
+  <link rel="stylesheet" href="/static/style.css?v=14" />
 </head>
 <body>
   <!-- ===== TOP BAR ===== -->
@@ -85,14 +85,15 @@
             <span class="ghost-tag">GRAD-CAM PREVIEW</span>
           </div>
           <p>AWAITING INPUT</p>
-          <span>prediction, class bars &amp; a Grad-CAM heatmap render here</span>
+          <span>stage assessment, probabilities &amp; regions of interest render here</span>
         </div>
 
         <div id="results" class="results hidden">
-          <div class="verdict">
+          <div class="verdict" id="verdict">
             <div class="verdict-main">
               <span class="muted">PREDICTED STAGE</span>
               <p id="prediction" class="prediction">—</p>
+              <span id="sev-tag" class="sev-tag">—</span>
             </div>
             <div class="verdict-conf">
               <span class="muted">CONFIDENCE</span>
@@ -101,14 +102,14 @@
           </div>
 
           <div class="block">
-            <h3>CLASS DISTRIBUTION</h3>
+            <h3>STAGE PROBABILITY</h3>
             <div id="bars"></div>
           </div>
 
           <div id="heatmap-block" class="block hidden">
-            <h3>ATTENTION MAP // GRAD-CAM</h3>
+            <h3>REGIONS OF INTEREST</h3>
             <img id="heatmap" alt="attention heatmap" />
-            <p class="hint">warmer = stronger influence on the verdict</p>
+            <p class="hint">Highlighted regions most influenced the assessment.</p>
           </div>
         </div>
       </div>
@@ -135,37 +136,24 @@
     <div class="disclaimer">
       <span class="warn">⚠ NOT A MEDICAL DEVICE</span>
       Research &amp; educational tool only. Predictions must not be used for
-      clinical diagnosis. *78% accuracy (best of a 12-seed search; typical ≈72%)
-      on a held-out split of a fuzzy-rebalanced training set; the 92% figure in
-      the paper was measured on a different
-      (now-removed) Kaggle dataset and is not reproducible with current data.
-      This accuracy is <strong>in-distribution only</strong> — the model was
-      trained and tested on a single MRI source, and predictions on scans from
-      other scanners/datasets can be confidently wrong (a known domain-shift
-      limitation). Always consult a qualified healthcare professional.
+      clinical diagnosis. Accuracy reflects performance on a held-out research
+      dataset and is not validated for clinical use. Always consult a qualified
+      healthcare professional.
     </div>
     <details class="limits">
-      <summary>▸ TECHNICAL LIMITATIONS &amp; DOMAIN SHIFT</summary>
+      <summary>▸ INTENDED USE &amp; LIMITATIONS</summary>
       <div class="limits-body">
-        <p>The model is tuned to the <strong>intensity histogram and contrast
-        matrix</strong> of a single OASIS-derived Kaggle MRI subset. It learns
-        cues localized to that distribution rather than scanner-independent
-        atrophy biomarkers.</p>
+        <p>AlzDetect is a research demonstration, developed and validated on a
+        single research MRI dataset; its accuracy is reported on held-out images
+        from that same source.</p>
         <ul>
-          <li><strong>Cross-institution scans</strong> (different scanner, field
-          strength, or vendor) shift the input statistics and trigger
-          out-of-distribution errors — often with <em>high</em> confidence.</li>
-          <li><strong>Different preprocessing</strong> (alternative
-          skull-stripping, bias-field correction, or intensity normalization)
-          produces the same effect.</li>
-          <li>Observed example: a textbook advanced-AD scan from another source
-          was classified <em>Non Demented</em> at 93% — a confident error that is
-          the signature of domain shift, <em>not</em> a label-mapping bug (the
-          index→label map is verified consistent with training, and
-          in-distribution accuracy is 78%).</li>
+          <li>It is <strong>not</strong> a diagnostic tool and has not been
+          clinically validated or regulatory-approved.</li>
+          <li>Results on scans from other scanners, institutions, or
+          preprocessing pipelines may be unreliable.</li>
+          <li>A single prediction is not a diagnosis — Alzheimer's assessment
+          requires clinical evaluation by qualified professionals.</li>
         </ul>
-        <p>Closing this gap requires multi-source / multi-scanner training data
-        or explicit domain-generalization, not further architecture tuning.</p>
       </div>
     </details>
     <div class="links">
@@ -175,6 +163,6 @@
     <p class="colophon">ALZDETECT · MOBILENETV2 · FASTAPI · BUILT FOR RESEARCH</p>
   </footer>
 
-  <script src="/static/app.js?v=13"></script>
+  <script src="/static/app.js?v=14"></script>
 </body>
 </html>

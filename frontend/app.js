@@ -128,6 +128,14 @@ function resetButton() {
   previewWrap.classList.remove("scanning");
 }
 
+// Clinical severity scale: stage label -> {level, status word}.
+const SEVERITY = {
+  "Non Demented":       { level: 0, status: "No dementia indicated" },
+  "Very mild Dementia": { level: 1, status: "Very mild — early stage" },
+  "Mild Dementia":      { level: 2, status: "Mild stage" },
+  "Moderate Dementia":  { level: 3, status: "Moderate stage" },
+};
+
 function render(data) {
   emptyState.classList.add("hidden");
 
@@ -135,12 +143,18 @@ function render(data) {
   document.getElementById("confidence").textContent =
     (data.confidence * 100).toFixed(1) + "%";
 
+  const sev = SEVERITY[data.prediction] || { level: 0, status: "" };
+  const verdict = document.getElementById("verdict");
+  verdict.className = "verdict sev-" + sev.level;
+  document.getElementById("sev-tag").textContent = sev.status;
+
   const bars = document.getElementById("bars");
   bars.innerHTML = "";
-  data.probabilities.forEach((p) => {
+  data.probabilities.forEach((p, i) => {
     const pct = (p.probability * 100).toFixed(1);
+    const lvl = (SEVERITY[p.label] || { level: 0 }).level;
     const row = document.createElement("div");
-    row.className = "bar-row";
+    row.className = "bar-row sev-" + lvl + (i === 0 ? " is-top" : "");
     row.innerHTML = `
       <div class="bar-label"><span>${p.label}</span><span>${pct}%</span></div>
       <div class="bar-track"><div class="bar-fill"></div></div>`;
