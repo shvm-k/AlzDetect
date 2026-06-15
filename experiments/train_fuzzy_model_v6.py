@@ -137,12 +137,14 @@ def main():
             data.append(_medical_safe_aug(imgs[i % len(imgs)], rng))
             labels.append(class_map[label]); i += 1
 
-    data = np.array(data, dtype=np.float32)
+    data = np.array(data, dtype=np.uint8)  # uint8 (4x less RAM than float32; values 0-255 identical)
     y_int = np.array(labels)
     print("After safe aug:", {CLASS_ORDER[i]: int((y_int == i).sum()) for i in range(4)})
 
     Xtr_img, Xte_img, ytr_int, yte_int = train_test_split(
         data, y_int, test_size=0.2, stratify=y_int, random_state=SEED)
+    del data, labels  # free the full stack before extracting features
+    import gc; gc.collect()
 
     inp = Input(shape=(IMG_SIZE, IMG_SIZE, 3))
     base = MobileNetV2(weights="imagenet", include_top=False, input_tensor=inp)
@@ -150,9 +152,13 @@ def main():
     pooled = GlobalAveragePooling2D()(base.output)
     feature_model = Model(inp, pooled)
 
+    # Keras autocasts uint8 batches to float32 inside the graph, so we never
+    # materialise a full float32 image stack (that's what OOM'd at 224px).
     print("\nExtracting frozen features at native resolution ...")
     Ftr = feature_model.predict(Xtr_img, batch_size=FEATURE_BATCH, verbose=1)
     Fte = feature_model.predict(Xte_img, batch_size=FEATURE_BATCH, verbose=1)
+    del Xtr_img, Xte_img  # images no longer needed; only the 1280-d features remain
+    gc.collect()
 
     min_class = min(int((ytr_int == i).sum()) for i in range(4))
     k = max(1, min(5, min_class - 1))
