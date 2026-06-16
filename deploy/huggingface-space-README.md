@@ -1,12 +1,13 @@
 ---
 title: AlzDetect
 emoji: 🧠
-colorFrom: indigo
-colorTo: green
+colorFrom: yellow
+colorTo: blue
 sdk: docker
 app_port: 7860
 pinned: false
 license: mit
+thumbnail: https://raw.githubusercontent.com/shvm-k/AlzDetect/main/frontend/avatar.png
 ---
 
 # AlzDetect — Alzheimer's MRI Stage Classifier
@@ -16,4 +17,7 @@ Very mild / Non Demented), per-class confidence, and a Grad-CAM attention map.
 
 ⚠️ **Research / educational tool only. Not a medical device. Not for clinical diagnosis.**
 
-Built with MobileNetV2 + FastAPI. Source: https://github.com/shvm-k/AlzDetect
+Model: MobileNetV2 (224px, frozen) + feature-space SMOTE + a trainable fuzzy
+inference head (v6, ~78% held-out accuracy). Built with FastAPI.
+Source: https://github.com/shvm-k/AlzDetect
+
