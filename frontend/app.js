@@ -19,6 +19,22 @@ function setValidation(msg, invalid) {
   validation.classList.toggle("invalid", !!invalid);
 }
 
+// Theme toggle: Lab (default) <-> Clinical, persisted in localStorage.
+const themeToggle = document.getElementById("theme-toggle");
+function applyTheme(mode) {
+  const clinical = mode === "clinical";
+  document.body.classList.toggle("clinical", clinical);
+  if (themeToggle) themeToggle.textContent = clinical ? "◑ LAB VIEW" : "◐ CLINICAL VIEW";
+}
+applyTheme(localStorage.getItem("alz-theme") || "lab");
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const next = document.body.classList.contains("clinical") ? "lab" : "clinical";
+    localStorage.setItem("alz-theme", next);
+    applyTheme(next);
+  });
+}
+
 // Demo / live badge.
 fetch("/api/health")
   .then((r) => r.json())
