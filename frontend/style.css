@@ -47,8 +47,9 @@ h1, h2, h3, .wordmark, .prediction { font-family: "Archivo Black", sans-serif; }
   background: var(--ink); color: var(--bg);
   border-bottom: var(--bd-thick);
 }
-.topbar-left { display: flex; align-items: baseline; gap: 12px; }
+.topbar-left { display: flex; align-items: center; gap: 11px; }
 .mark { color: var(--cyan); font-size: 18px; letter-spacing: -2px; }
+.mark-svg { height: 30px; width: auto; display: block; }
 .wordmark { font-size: 20px; letter-spacing: 1px; }
 .ver { font: 600 11px "JetBrains Mono", monospace; color: var(--yellow); }
 .topbar-right { display: flex; gap: 8px; flex-wrap: wrap; }

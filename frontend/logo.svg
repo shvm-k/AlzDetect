@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" width="320" height="72" role="img" aria-label="AlzDetect logo">
+  <!-- mark -->
+  <g>
+    <rect x="4" y="4" width="58" height="58" fill="#fdf7ea" stroke="#0d0d0d" stroke-width="4"/>
+    <rect x="4" y="4" width="13" height="13" fill="#ffd21e" stroke="#0d0d0d" stroke-width="4"/>
+    <path d="M17 53 L33 14 L49 53" fill="none" stroke="#0d0d0d" stroke-width="7"
+          stroke-linecap="square" stroke-linejoin="miter"/>
+    <polyline points="21,40 26,40 29,32 32,47 36,26 39,40 45,40" fill="none"
+              stroke="#2fe6d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- wordmark: ALZ (ink) + DETECT (boxed/emphasised) -->
+  <text x="78" y="47" font-family="'Archivo Black', sans-serif" font-size="30"
+        fill="#0d0d0d" letter-spacing="1">ALZ</text>
+  <text x="148" y="47" font-family="'Archivo Black', sans-serif" font-size="30"
+        fill="#0d0d0d" letter-spacing="1">DETECT</text>
+  <!-- cyan underline under DETECT to emphasise the tool's function -->
+  <rect x="148" y="52" width="160" height="6" fill="#2fe6d6"/>
+</svg>

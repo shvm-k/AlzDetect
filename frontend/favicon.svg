@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="AlzDetect">
+  <!-- neo-brutalist square: paper fill, thick ink border -->
+  <rect x="3" y="3" width="58" height="58" fill="#fdf7ea" stroke="#0d0d0d" stroke-width="4"/>
+  <!-- yellow corner accent -->
+  <rect x="3" y="3" width="13" height="13" fill="#ffd21e" stroke="#0d0d0d" stroke-width="4"/>
+  <!-- geometric A: two legs -->
+  <path d="M16 52 L32 13 L48 52" fill="none" stroke="#0d0d0d" stroke-width="7"
+        stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- crossbar replaced by an EEG / brain-wave pulse (cyan) -->
+  <polyline points="20,39 25,39 28,31 31,46 35,25 38,39 44,39" fill="none"
+            stroke="#2fe6d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
