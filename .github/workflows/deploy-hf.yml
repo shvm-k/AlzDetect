@@ -42,6 +42,10 @@ jobs:
           # The app downloads the model at boot via MODEL_URL (set in the Space
           # settings) pointing at this GitHub repo's raw file.
           rm -f backend/models/*.keras backend/models/*.h5
+          # The Space only needs the runnable app. Strip research artifacts
+          # (notebooks, figures, paper, journey docs) — they bloat the Space and
+          # HF rejects some of the binary figures on push.
+          rm -rf experiments paper docs .github
           git checkout --orphan hf-deploy
           git add -A
           git commit -m "Deploy to Hugging Face Space" >/dev/null
