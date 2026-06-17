@@ -13,15 +13,13 @@ Alzheimer’s Disease (AD) is a progressive neurological disorder. Early and acc
 - **Non-Demented**
 - **Very Mild Dementia**
 
-Two models were developed:
-- ✅ **MobileNetV2-based CNN**
-- ✅ **MobileNetV2 + Fuzzy Logic post-processing**
-
-Fuzzy logic is applied after the CNN to enhance decision boundaries based on feature outputs.
+The pipeline combines a **frozen MobileNetV2** feature extractor with **two
+fuzzy-logic stages**: a fuzzy controller that rebalances the training data, and a
+trainable fuzzy inference head that makes the final classification.
 
 ## 📂 Dataset
 
-The dataset used is the **Alzheimer MRI Dataset** from [Kaggle](https://www.kaggle.com/datasets/sachinkumar413/alzheimer-mri-dataset).
+The dataset used is the **Alzheimer MRI Dataset** from [Kaggle](https://www.kaggle.com/datasets/legendahmed/alzheimermridataset) (OASIS-derived axial MRI slices across four stages).
 
 
 
@@ -48,48 +46,33 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 > \*78% is the **best of a 12-seed search** (typical macro-F1 ≈ 0.72), measured
 > **in-distribution** on a held-out split of a single MRI source. The naive
 > baseline row is evaluated on the full imbalanced set and is shown only to
-> motivate the rebalancing — the two rows are **not a like-for-like comparison**.
-> See `paper/` for the full manuscript and a "Threats to Validity" discussion.
+> motivate the rebalancing.
 
-> 🔁 **Note on the live deployed model:** the original `sachinkumar413/alzheimer-mri-dataset`
-> used above has since been removed from Kaggle. The model currently served by
-> the web app (`backend/models/alz_mobilenetv2.keras`) was retrained on a mirror
-> dataset (`legendahmed/alzheimermridataset`) using the same fuzzy-resampling
-> pipeline, with a **real fuzzy inference head** in the classification path
-> (see `experiments/train_fuzzy_model_v6.py` and `backend/fuzzy_layer.py`):
-> **224×224** frozen MobileNetV2 features → SMOTE balancing in feature space →
-> a small Dense projection → a trainable Takagi–Sugeno–Kang fuzzy layer
-> (Gaussian membership functions → fuzzy rule firing → defuzzification), with
-> augmentation restricted to ≤5° rotation + horizontal flip. It scores
-> **78% accuracy / 0.785 macro-F1 / 0.97 Moderate-Dem. recall** on its held-out
-> split, with Very-mild-Dementia F1 of 0.63 — up from 72% at 128×128 input
-> (raising the resolution to MobileNetV2's native size improved *every* class).
-> The fuzzy head is small and init-sensitive, so this is the **best of a
-> 12-seed search** (typical macro-F1 ≈ 0.72); the best seed is selected on the
-> held-out split, so 0.785 is an optimistic point estimate. See
-> `experiments/Train_AlzDetect_v6_Kaggle.ipynb` for the best-of-N training loop.
-> **Generalization caveat:** this score is *in-distribution only* — the model
-> was trained and evaluated on a single MRI source. On scans from other
-> scanners/datasets it can be confidently wrong (e.g. calling an obvious AD scan
-> "Non Demented"), a classic domain-shift / shortcut-learning failure. Closing
-> this gap needs multi-source training data, not more architecture tuning.
-> Note the fuzzy head is genuine fuzzy
-> logic *in the decision path* — distinct from the skfuzzy resampling
-> controller, which only sets per-class target counts. The 92% figure above is
-> not reproducible until the original dataset resurfaces or an equivalent
-> replacement is found.
+### How the deployed model works
 
-<p align="left">
-<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/65c080bc-e087-465c-9ec4-0b93c34dc389"/>
-</p>
+The model served by the web app (`backend/models/alz_mobilenetv2.keras`) uses a
+**real fuzzy inference head** in the classification path (see
+`experiments/train_fuzzy_model_v6.py` and `backend/fuzzy_layer.py`):
 
-<p align="left">
-<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/1f136f58-f8c6-45ba-acaa-02745cf848d2" />
-</p>
+**224×224** frozen MobileNetV2 features → SMOTE balancing in feature space → a
+small Dense projection → a trainable **Takagi–Sugeno–Kang fuzzy layer** (Gaussian
+membership functions → fuzzy rule firing → defuzzification), with augmentation
+restricted to ≤5° rotation + horizontal flip.
 
-<p align="left">
-<img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/b4c67d4f-9417-43eb-9da5-76379e656b84" />
-</p>
+It scores **78% accuracy / 0.785 macro-F1 / 0.97 Moderate-Dem. recall** on its
+held-out split, with Very-mild-Dementia F1 of **0.63**. Raising the input to
+MobileNetV2's native 224×224 resolution improved *every* class. The fuzzy head is
+small and init-sensitive, so the reported figure is the **best of a 12-seed
+search** (typical macro-F1 ≈ 0.72) and is an optimistic point estimate. See
+`experiments/Train_AlzDetect_v6_Kaggle.ipynb` for the best-of-N training loop, and
+`docs/METHODOLOGY.md` / `paper/` for full details.
+
+> **Generalization caveat:** this score is *in-distribution only* — the model was
+> trained and evaluated on a single MRI source. On scans from other
+> scanners/datasets it can be confidently wrong (a classic domain-shift /
+> shortcut-learning failure). Note the fuzzy head is genuine fuzzy logic *in the
+> decision path* — distinct from the skfuzzy resampling controller, which only
+> sets per-class target counts.
 
 ## 📚 Citation
 
