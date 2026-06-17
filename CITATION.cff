@@ -11,16 +11,10 @@ abstract: >-
   an explicit domain-shift / threats-to-validity analysis.
 type: software
 authors:
-  - given-names: Aditya
-    family-names: Jaiswal
   - given-names: Nilabh
     family-names: Shivam
-  - given-names: Parth
-    family-names: Vaishnav
-  - given-names: Prabhat
-    family-names: Tiwari
-  - given-names: Stiena Wilson
-    family-names: Anthony
+    orcid: "https://orcid.org/0009-0003-8422-9573"
+    affiliation: "School of Computing Science & Engineering, VIT Bhopal University"
 repository-code: "https://github.com/shvm-k/AlzDetect"
 url: "https://doi.org/10.5281/zenodo.20722471"
 date-released: "2026-06-16"
@@ -43,16 +37,9 @@ preferred-citation:
     Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
     Classification from MRI: A Reproducible Pipeline with Honest Benchmarking
   authors:
-    - given-names: Aditya
-      family-names: Jaiswal
     - given-names: Nilabh
       family-names: Shivam
-    - given-names: Parth
-      family-names: Vaishnav
-    - given-names: Prabhat
-      family-names: Tiwari
-    - given-names: Stiena Wilson
-      family-names: Anthony
+      orcid: "https://orcid.org/0009-0003-8422-9573"
   year: 2026
   publisher:
     name: Zenodo

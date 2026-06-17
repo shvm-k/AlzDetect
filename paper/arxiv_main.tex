@@ -21,18 +21,15 @@
 
 \begin{document}
 
-\title{Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
-Classification from MRI: A Reproducible Pipeline with Honest Benchmarking}
+\title{Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease Classification from MRI: A Reproducible Pipeline with Honest Benchmarking}
 
-\author{Aditya Jaiswal, Nilabh Shivam, Parth Vaishnav, Prabhat Tiwari,
-and Stiena Wilson Anthony%
-\thanks{The authors are with the School of Computing Science and Engineering,
-VIT Bhopal University, Madhya Pradesh, India. Corresponding author e-mail:
-TODO@vitbhopal.ac.in.}%
-\thanks{Code, weights, and a live demo:
-\url{https://github.com/shvm-k/AlzDetect}.}}
+\author{Nilabh Shivam%
+\thanks{Nilabh Shivam is with the School of Computing Science \& Engineering,
+VIT Bhopal University, Madhya Pradesh, India
+(ORCID: 0009-0003-8422-9573).}
+}
 
-\markboth{Preprint --- Draft for Submission (arXiv)}{}
+\markboth{}{}
 \maketitle
 
 \begin{abstract}
@@ -126,10 +123,13 @@ feature space; and (v) a trainable TSK fuzzy inference head.
 \end{figure*}
 
 \subsection{Dataset and a deterministic label protocol}
-We use a four-class axial brain-MRI dataset (an OASIS-derived~\cite{oasis},
-augmented set mirrored on Kaggle, after the originally cited dataset was
-removed). Per-class counts are highly imbalanced (Table~\ref{tab:counts},
-Fig.~\ref{fig:dist}). To eliminate the \emph{alphabetical-sort label-drift}
+We use the publicly available Alzheimer MRI Dataset~\cite{9}. The dataset contains
+four diagnostic categories: Non Demented, Very Mild Demented,
+Mild Demented, and Moderate Demented. The collection is derived
+from OASIS MRI scans and consists of preprocessed two-dimensional
+axial MRI slices commonly used in Alzheimer's disease
+classification research. Per-class counts are highly imbalanced
+(Table~\ref{tab:counts}, Fig.~\ref{fig:dist}). To eliminate the \emph{alphabetical-sort label-drift}
 bug---in which directory-based loaders assign class indices from OS-dependent
 ordering---class membership is resolved explicitly from the filename prefix via a
 regular expression and a fixed dictionary, and the integer label is the position
@@ -250,8 +250,7 @@ interventions that regressed and were rejected.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig4_macrof1_verymild.png}
-\caption{Macro-F1 and the Very-mild-Dementia F1 (``the blindspot'') across
-iterations.}
+\caption{Macro-F1 and the Very-Mild-Dementia F1 (the most challenging class) across iterations.}
 \label{fig:mf1}
 \end{figure}
 
@@ -269,7 +268,6 @@ over-sampling a minority class beyond balance with focal loss all reduced
 performance; in v5, forcing the Very-mild class induced a majority-guess bias
 that collapsed neighboring-class recall.
 
-\subsection{Final model}
 \begin{table}[t]
 \centering
 \caption{Per-class performance of the deployed model (v6 + best-of-12).}
@@ -280,7 +278,7 @@ Class & Precision & Recall & F1 & Support \\
 \midrule
 Mild Dementia & 0.83 & 0.81 & 0.82 & 574 \\
 Moderate Dementia & 0.96 & 0.97 & 0.97 & 454 \\
-Very mild Dementia & 0.55 & 0.72 & 0.63 & 421 \\
+Very Mild Dementia & 0.55 & 0.72 & 0.63 & 421 \\
 Non Demented & 0.83 & 0.65 & 0.73 & 563 \\
 \midrule
 Accuracy & & & 0.78 & 2012 \\
@@ -291,7 +289,7 @@ Macro avg & 0.79 & 0.79 & 0.785 & 2012 \\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.92\columnwidth]{figures/fig5_perclass_f1.png}
+\includegraphics[width=\columnwidth]{figures/fig5_perclass_f1.png}
 \caption{Per-class F1 of the deployed model.}
 \label{fig:perclass}
 \end{figure}
@@ -322,8 +320,12 @@ map could not yield $78\%$ in-distribution accuracy. It is domain shift /
 shortcut learning~\cite{shortcut}; closing the gap requires multi-source data or
 domain-generalization methods, not further architecture tuning.
 
-\textbf{Not a medical device.} The system is a research and educational
-demonstration and is not clinically validated.
+\textbf{Not a medical device.} The system is a research and educational demonstration and is not clinically validated.
+
+\textbf{Future work.}
+Future work should evaluate the proposed pipeline using multi-site datasets,
+external validation cohorts, and cross-validation protocols to obtain more
+robust estimates of generalization performance.
 
 \section{Conclusion}
 AlzDetect is a compact, reproducible, and honestly benchmarked four-stage AD--MRI
@@ -350,8 +352,13 @@ Res.}, vol.~16, pp.~321--357, 2002.
 \bibitem{anfis} J.-S.~R.~Jang, ``ANFIS: Adaptive-Network-Based Fuzzy Inference
 System,'' \emph{IEEE Trans. Syst., Man, Cybern.}, vol.~23, no.~3, pp.~665--685,
 1993.
-\bibitem{fuzzycnn} D.~Diqi, ``A Convolutional Fuzzy Neural Network for Image
-Classification,'' (and related fuzzy-pooling CNN works for medical imaging).
+\bibitem{fuzzycnn}
+S.~K.~Pal and S.~Mitra,
+``Multilayer Perceptron, Fuzzy Sets, and Classification,''
+\emph{IEEE Trans. Neural Netw.},
+vol.~3, no.~5,
+pp.~683--697,
+1992.
 \bibitem{focal} T.-Y.~Lin, P.~Goyal, R.~Girshick, K.~He, and P.~Doll\'ar, ``Focal
 Loss for Dense Object Detection,'' in \emph{Proc. IEEE ICCV}, 2017,
 pp.~2980--2988.
@@ -364,6 +371,11 @@ J.~C.~Morris, and R.~L.~Buckner, ``Open Access Series of Imaging Studies
 \bibitem{shortcut} R.~Geirhos, J.-H.~Jacobsen, C.~Michaelis, R.~Zemel,
 W.~Brendel, M.~Bethge, and F.~A.~Wichmann, ``Shortcut Learning in Deep Neural
 Networks,'' \emph{Nature Mach. Intell.}, vol.~2, pp.~665--673, 2020.
+\bibitem{9} Ahmed Legend,
+``Alzheimer MRI Dataset,''
+Kaggle, 2021.
+[Online]. Available:
+\url{https://www.kaggle.com/datasets/legendahmed/alzheimermridataset}
 \end{thebibliography}
 
 \end{document}
