@@ -103,11 +103,22 @@ def _fit_eval(Xtr, ytr, Xte, yte, method, seed):
     import tensorflow as tf
     from tensorflow.keras.optimizers import Adam
     from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.callbacks import EarlyStopping
     from sklearn.metrics import accuracy_score, f1_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
     from sklearn.utils.class_weight import compute_class_weight
     from imblearn.over_sampling import SMOTE, RandomOverSampler
 
     tf.keras.utils.set_random_seed(seed)
+
+    # Standardize features per fold (fit on TRAIN only). Raw MobileNetV2 GAP
+    # features are not zero-centred/unit-scaled; without this the small head
+    # trained with Adam is unstable and can diverge on some folds.
+    scaler = StandardScaler().fit(Xtr)
+    Xtr = scaler.transform(Xtr).astype(np.float32)
+    Xte = scaler.transform(Xte).astype(np.float32)
+
     in_dim = Xtr.shape[1]
     class_weight = None
     loss = "categorical_crossentropy"
@@ -136,9 +147,15 @@ def _fit_eval(Xtr, ytr, Xte, yte, method, seed):
     else:
         raise ValueError(method)
 
-    head.compile(optimizer=Adam(1e-3), loss=loss, metrics=["accuracy"])
-    head.fit(Xt, to_categorical(yt, 4), epochs=EPOCHS, batch_size=BATCH,
-             verbose=0, class_weight=class_weight)
+    # Internal stratified val split + early stopping -> stable, no fold collapse.
+    Xt2, Xv, yt2, yv = train_test_split(
+        Xt, yt, test_size=0.1, stratify=yt, random_state=seed)
+    head.compile(optimizer=Adam(5e-4), loss=loss, metrics=["accuracy"])
+    head.fit(Xt2, to_categorical(yt2, 4),
+             validation_data=(Xv, to_categorical(yv, 4)),
+             epochs=80, batch_size=BATCH, verbose=0, class_weight=class_weight,
+             callbacks=[EarlyStopping(monitor="val_loss", patience=8,
+                                      restore_best_weights=True)])
     yp = np.argmax(head.predict(Xte, verbose=0), axis=1)
     return accuracy_score(yte, yp), f1_score(yte, yp, average="macro")
 
