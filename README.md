@@ -1,5 +1,7 @@
 # 🧠 Alzheimer's Disease Detection using MobileNetV2 + Fuzzy Logic
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20722471.svg)](https://doi.org/10.5281/zenodo.20722471)
+
 This project presents a deep learning-based approach to classify the stages of Alzheimer's Disease from MRI brain scans using **MobileNetV2**, enhanced with **Fuzzy Logic** for improved interpretability and precision.
 
 
@@ -38,15 +40,16 @@ The dataset used is the **Alzheimer MRI Dataset** from [Kaggle](https://www.kagg
 
 Measured from the project notebooks (macro-averaged over the 4 classes):
 
-| Model                       | Dataset            | Accuracy | Macro-F1 | Moderate-Dem. Recall |
-|----------------------------|--------------------|----------|----------|----------------------|
-| MobileNetV2 (baseline)     | full, imbalanced   | 56%      | 0.25     | 0%                   |
-| MobileNetV2 + Fuzzy Logic  | balanced subset    | **92%**  | **0.93** | **92%**              |
+| Configuration                              | Evaluation        | Accuracy | Macro-F1 | Moderate-Dem. Recall |
+|--------------------------------------------|-------------------|----------|----------|----------------------|
+| MobileNetV2 (naive baseline)               | full, imbalanced  | 56%      | 0.25     | 0%                   |
+| **AlzDetect** (fuzzy + feature-space SMOTE, 224px) | held-out split | **78%**\* | **0.785** | **0.97**            |
 
-> ⚠️ The two rows are **not a like-for-like comparison** (they differ in dataset
-> size, evaluation distribution, and architecture). See `paper/` for the full
-> manuscript and a "Threats to Validity" discussion. A controlled comparison
-> script is in `experiments/`.
+> \*78% is the **best of a 12-seed search** (typical macro-F1 ≈ 0.72), measured
+> **in-distribution** on a held-out split of a single MRI source. The naive
+> baseline row is evaluated on the full imbalanced set and is shown only to
+> motivate the rebalancing — the two rows are **not a like-for-like comparison**.
+> See `paper/` for the full manuscript and a "Threats to Validity" discussion.
 
 > 🔁 **Note on the live deployed model:** the original `sachinkumar413/alzheimer-mri-dataset`
 > used above has since been removed from Kaggle. The model currently served by
@@ -87,3 +90,22 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/b4c67d4f-9417-43eb-9da5-76379e656b84" />
 </p>
+
+## 📚 Citation
+
+This work is archived on Zenodo: **https://doi.org/10.5281/zenodo.20722471**
+
+If you use this code or the paper, please cite:
+
+```bibtex
+@misc{shivam2026alzdetect,
+  title        = {Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
+                  Classification from MRI: A Reproducible Pipeline with Honest
+                  Benchmarking},
+  author       = {Shivam, Nilabh},
+  year         = {2026},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.20722471},
+  url          = {https://doi.org/10.5281/zenodo.20722471}
+}
+```

@@ -1,0 +1,47 @@
+cff-version: 1.2.0
+message: "If you use this software or paper, please cite it using the metadata below."
+title: >-
+  Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
+  Classification from MRI: A Reproducible Pipeline with Honest Benchmarking
+abstract: >-
+  A lightweight, reproducible pipeline for four-stage Alzheimer's disease
+  staging from MRI, pairing a frozen MobileNetV2 extractor with a fuzzy
+  resampling controller and a trainable Takagi-Sugeno-Kang fuzzy inference
+  head, with feature-space SMOTE. Released with a deployed web application and
+  an explicit domain-shift / threats-to-validity analysis.
+type: software
+authors:
+  - given-names: Nilabh
+    family-names: Shivam
+    orcid: "https://orcid.org/0009-0003-8422-9573"
+    affiliation: "School of Computing Science & Engineering, VIT Bhopal University"
+repository-code: "https://github.com/shvm-k/AlzDetect"
+url: "https://doi.org/10.5281/zenodo.20722471"
+date-released: "2026-06-16"
+license: MIT
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20722471
+    description: Zenodo archive of this work
+keywords:
+  - Alzheimer's disease
+  - MRI
+  - MobileNetV2
+  - fuzzy logic
+  - SMOTE
+  - class imbalance
+  - domain shift
+preferred-citation:
+  type: article
+  title: >-
+    Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
+    Classification from MRI: A Reproducible Pipeline with Honest Benchmarking
+  authors:
+    - given-names: Nilabh
+      family-names: Shivam
+      orcid: "https://orcid.org/0009-0003-8422-9573"
+  year: 2026
+  publisher:
+    name: Zenodo
+  doi: 10.5281/zenodo.20722471
+  url: "https://doi.org/10.5281/zenodo.20722471"

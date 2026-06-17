@@ -47,8 +47,9 @@ h1, h2, h3, .wordmark, .prediction { font-family: "Archivo Black", sans-serif; }
   background: var(--ink); color: var(--bg);
   border-bottom: var(--bd-thick);
 }
-.topbar-left { display: flex; align-items: baseline; gap: 12px; }
+.topbar-left { display: flex; align-items: center; gap: 11px; }
 .mark { color: var(--cyan); font-size: 18px; letter-spacing: -2px; }
+.mark-svg { height: 30px; width: auto; display: block; }
 .wordmark { font-size: 20px; letter-spacing: 1px; }
 .ver { font: 600 11px "JetBrains Mono", monospace; color: var(--yellow); }
 .topbar-right { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -257,6 +258,14 @@ footer { max-width: 1140px; margin: 0 auto; padding: 10px 4vw 56px; }
   box-shadow: 4px 4px 0 var(--ink); }
 .sample-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
 
+/* ===================== MEDICAL CAUTION (at point of action) ===================== */
+.med-caution {
+  margin: 12px 0 0; padding: 9px 12px; font-size: 11.5px; font-weight: 700;
+  letter-spacing: .3px; color: #7a1f1f; background: #fdeaea;
+  border: 2px solid #c92a2a; display: flex; align-items: center; gap: 7px;
+}
+.med-dot { color: #c92a2a; font-size: 14px; }
+
 /* ===================== VALIDATION SLOT ===================== */
 .validation {
   margin: 12px 0 0; padding: 9px 12px; font: 600 11px "JetBrains Mono", monospace;
@@ -326,3 +335,42 @@ footer { max-width: 1140px; margin: 0 auto; padding: 10px 4vw 56px; }
 .link-btn-alt:hover { background: var(--yellow); }
 
 .hidden { display: none !important; }
+
+/* =====================================================================
+   CLINICAL VIEW  —  optional calmer theme (toggled via #theme-toggle).
+   Re-tunes the brand variables so every component softens at once:
+   cool palette, thin borders, soft shadows, no dot grid, calmer hero.
+   ===================================================================== */
+.chip-theme { background: var(--bg); color: var(--ink); border-color: var(--bg);
+  cursor: pointer; font-family: "JetBrains Mono", monospace; }
+.chip-theme:hover { background: var(--cyan); }
+
+body.clinical {
+  --bg:     #eef2f6;
+  --ink:    #233044;     /* slate, not pure black */
+  --paper:  #ffffff;
+  --cyan:   #0ea5a3;     /* calm teal */
+  --yellow: #e7b54a;     /* muted amber */
+  --grey:   #c2cad6;
+  --bd:      2px solid var(--ink);
+  --bd-thick:2px solid var(--ink);
+  --sh:      0 3px 10px rgba(35,48,68,.10);
+  --sh-lg:   0 8px 24px rgba(35,48,68,.12);
+  background-image: none;                 /* drop the dot grid */
+}
+body.clinical .topbar { border-bottom-width: 2px; }
+body.clinical h1, body.clinical h2, body.clinical h3,
+body.clinical .wordmark { letter-spacing: 0; }
+body.clinical .hero h1 { font-size: clamp(34px, 5vw, 60px); letter-spacing: -1px; }
+body.clinical .blink { display: none; }            /* drop the terminal cursor */
+body.clinical .stat { transform: none !important; border-radius: 8px; }
+body.clinical .panel { border-radius: 10px; }
+body.clinical .panel-tab { border-radius: 4px; }
+body.clinical .verdict-main, body.clinical .verdict-conf,
+body.clinical .spec, body.clinical .stat, body.clinical .disclaimer,
+body.clinical .limits, body.clinical .spec-note { border-radius: 8px; }
+body.clinical .primary { border-radius: 8px; }
+body.clinical .primary:hover:not(:disabled) { box-shadow: var(--sh-lg); transform: translateY(-1px); }
+body.clinical .empty-glyph, body.clinical .ghost-tag { letter-spacing: 1px; }
+body.clinical .chip { border-radius: 5px; }
+body.clinical .sample-btn, body.clinical .bar-track, body.clinical .bar-fill { border-radius: 6px; }
