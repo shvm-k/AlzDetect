@@ -1,5 +1,7 @@
 # 🧠 Alzheimer's Disease Detection using MobileNetV2 + Fuzzy Logic
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20722471.svg)](https://doi.org/10.5281/zenodo.20722471)
+
 This project presents a deep learning-based approach to classify the stages of Alzheimer's Disease from MRI brain scans using **MobileNetV2**, enhanced with **Fuzzy Logic** for improved interpretability and precision.
 
 
@@ -87,3 +89,26 @@ Measured from the project notebooks (macro-averaged over the 4 classes):
 <p align="left">
 <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/b4c67d4f-9417-43eb-9da5-76379e656b84" />
 </p>
+
+## 📚 Citation
+
+This work is archived on Zenodo: **https://doi.org/10.5281/zenodo.20722471**
+
+If you use this code or the paper, please cite:
+
+```bibtex
+@misc{alzdetect2026,
+  title        = {Fuzzy-Augmented MobileNetV2 for Four-Stage Alzheimer's Disease
+                  Classification from MRI: A Reproducible Pipeline with Honest
+                  Benchmarking},
+  author       = {Jaiswal, Aditya and Shivam, Nilabh and Vaishnav, Parth and
+                  Tiwari, Prabhat and Anthony, Stiena Wilson},
+  year         = {2026},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.20722471},
+  url          = {https://doi.org/10.5281/zenodo.20722471}
+}
+```
+
+> ⚠️ Verify the `title` and author order above match exactly what is registered
+> on the Zenodo record before quoting this citation elsewhere.
